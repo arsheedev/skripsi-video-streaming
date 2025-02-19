@@ -12,3 +12,38 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           Int          @id @default(autoincrement())
+  username     String       @db.VarChar(255)
+  password     String       @db.VarChar(255)
+  session      Session[]
+  viewedVideos VideoAsset[]
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  expiresAt DateTime
+  ipAddress String   @db.TinyText
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model VideoAsset {
+  id         Int            @id @default(autoincrement())
+  name       String         @db.Text
+  url        String         @db.Text
+  format     String         @db.VarChar(50)
+  views      Int
+  qualities  VideoQuality[]
+  userViewed User[]
+}
+
+model VideoQuality {
+  id           Int         @id @default(autoincrement())
+  resolution   String      @db.VarChar(20)
+  bitrate      Int
+  url          String      @db.Text
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  videoAssetId Int?
+}
