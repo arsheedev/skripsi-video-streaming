@@ -59,5 +59,13 @@
 		"@prisma/client": "^6.4.0",
 		"jsonwebtoken": "^9.0.2",
 		"svelte-sonner": "^0.3.28"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@prisma/client",
+			"@prisma/engines",
+			"esbuild",
+			"prisma"
+		]
 	}
 }
