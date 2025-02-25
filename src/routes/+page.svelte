@@ -1,7 +1,29 @@
 <script lang="ts">
+	import { createId } from '@paralleldrive/cuid2'
 	import { onMount } from 'svelte'
 
+	let downloadSpeed = $state('')
+	let uploadSpeed = $state('')
+	let latency = $state(0)
+	let userId: string | null = $state('')
+	let userIp: string | null = $state('')
+
 	onMount(async () => {
+		userId = localStorage.getItem('userId')
+
+		if (!userId) {
+			userId = createId()
+		}
+
+		fetch('https://api.ipify.org?format=json')
+			.then((response) => response.json())
+			.then((data) => {
+				userIp = data.ip
+			})
+			.catch((error) => {
+				console.error('Error fetching IP:', error)
+			})
+
 		function formatSpeed(bytesPerSecond: number) {
 			if (bytesPerSecond < 1024) {
 				return `${bytesPerSecond.toFixed(2)} B/s`
@@ -12,22 +34,72 @@
 			}
 		}
 
-		function testSpeed() {
+		function testDownloadSpeed() {
 			const startTime = performance.now()
-			fetch('/texas.jpg?startTime=' + startTime)
+			fetch(`/images/texas.jpg?startTime=${startTime}`)
 				.then((response) => response.blob())
 				.then((blob) => {
 					const endTime = performance.now()
 					const duration = endTime - startTime
 					const speed = (blob.size / duration) * 1000 // in bytes/second
-					const formattedSpeed = formatSpeed(speed)
-					console.log(`Speed: ${formattedSpeed}`)
+					downloadSpeed = formatSpeed(speed)
+
+					console.log(`Download Speed: ${downloadSpeed}`)
 				})
 		}
 
-		testSpeed()
+		function testUploadSpeed() {
+			const startTime = performance.now()
+			const fileSize = 1 * 1024 * 1024 // 1 MB
+			const data = new Blob([new ArrayBuffer(fileSize)], { type: 'application/octet-stream' })
 
-		setInterval(testSpeed, 10000)
+			fetch('/api/test', {
+				method: 'POST',
+				body: data,
+				headers: { 'Content-Type': 'application/octet-stream' }
+			}).then(() => {
+				const endTime = performance.now()
+				const duration = endTime - startTime
+				const speed = (fileSize / duration) * 1000 // in bytes/second
+				uploadSpeed = formatSpeed(speed)
+
+				console.log(`Upload Speed: ${uploadSpeed}`)
+			})
+		}
+
+		function testLatency() {
+			const startTime = performance.now()
+			fetch('/api/test').then(() => {
+				const endTime = performance.now()
+				latency = endTime - startTime
+
+				console.log(`Latency: ${latency.toFixed(2)} ms`)
+			})
+		}
+
+		testDownloadSpeed()
+		testUploadSpeed()
+		testLatency()
+
+		setInterval(async () => {
+			testDownloadSpeed()
+			testUploadSpeed()
+			testLatency()
+
+			await fetch('/api/speed-test', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					userId,
+					userIp,
+					downloadSpeed,
+					uploadSpeed,
+					latency
+				})
+			})
+		}, 1000 * 60)
 	})
 </script>
 
