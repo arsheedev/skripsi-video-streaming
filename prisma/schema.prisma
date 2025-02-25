@@ -47,3 +47,13 @@ model VideoQuality {
   VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
   videoAssetId Int?
 }
+
+model UserSpeed {
+  id            Int      @id @default(autoincrement())
+  userId        String
+  userIp        String?
+  downloadSpeed String
+  uploadSpeed   String
+  latency       Int
+  date          DateTime @default(now())
+}
