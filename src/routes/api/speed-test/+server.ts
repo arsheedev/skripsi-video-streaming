@@ -1,4 +1,5 @@
 import db from '$lib/server/db'
+import { createId } from '@paralleldrive/cuid2'
 import { json, type RequestHandler } from '@sveltejs/kit'
 
 interface JsonData {
@@ -10,7 +11,8 @@ interface JsonData {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { userId, userIp, downloadSpeed, uploadSpeed, latency }: JsonData = await request.json()
+	const { userIp, downloadSpeed, uploadSpeed, latency }: JsonData = await request.json()
+	const userId = createId()
 
 	await db.userSpeed.create({ data: { userId, userIp, downloadSpeed, uploadSpeed, latency } })
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { createId } from '@paralleldrive/cuid2'
 	import { onMount } from 'svelte'
 
 	let downloadSpeed = $state('')
@@ -9,12 +8,6 @@
 	let userIp: string | null = $state('')
 
 	onMount(async () => {
-		userId = localStorage.getItem('userId')
-
-		if (!userId) {
-			userId = createId()
-		}
-
 		fetch('https://api.ipify.org?format=json')
 			.then((response) => response.json())
 			.then((data) => {
@@ -25,18 +18,20 @@
 			})
 
 		function formatSpeed(bytesPerSecond: number) {
-			if (bytesPerSecond < 1024) {
-				return `${bytesPerSecond.toFixed(2)} B/s`
-			} else if (bytesPerSecond < 1024 * 1024) {
-				return `${(bytesPerSecond / 1024).toFixed(2)} KB/s`
-			} else {
-				return `${(bytesPerSecond / (1024 * 1024)).toFixed(2)} MB/s`
-			}
+			// if (bytesPerSecond < 1024) {
+			// 	return `${bytesPerSecond.toFixed(2)} B/s`
+			// } else if (bytesPerSecond < 1024 * 1024) {
+			// 	return `${(bytesPerSecond / 1024).toFixed(2)} KB/s`
+			// } else {
+			// 	return `${(bytesPerSecond / (1024 * 1024)).toFixed(2)} MB/s`
+			// }
+
+			return (bytesPerSecond / 1024).toFixed(2)
 		}
 
 		function testDownloadSpeed() {
 			const startTime = performance.now()
-			fetch(`/images/texas.jpg?startTime=${startTime}`)
+			fetch(`/texas.jpg?startTime=${startTime}`)
 				.then((response) => response.blob())
 				.then((blob) => {
 					const endTime = performance.now()
@@ -77,10 +72,6 @@
 			})
 		}
 
-		testDownloadSpeed()
-		testUploadSpeed()
-		testLatency()
-
 		setInterval(async () => {
 			testDownloadSpeed()
 			testUploadSpeed()
@@ -92,14 +83,13 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					userId,
 					userIp,
 					downloadSpeed,
 					uploadSpeed,
 					latency
 				})
 			})
-		}, 1000 * 60)
+		}, 1000 * 10)
 	})
 </script>
 
