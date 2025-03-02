@@ -65,6 +65,7 @@
 		"dotenv": "^16.4.7",
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.476.0",
+		"sharp": "^0.33.5",
 		"simple-hls": "^0.0.1",
 		"svelte-sonner": "^0.3.28"
 	},
@@ -73,7 +74,8 @@
 			"@prisma/client",
 			"@prisma/engines",
 			"esbuild",
-			"prisma"
+			"prisma",
+			"sharp"
 		]
 	}
 }
