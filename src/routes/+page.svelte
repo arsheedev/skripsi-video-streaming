@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { onMount } from 'svelte'
 
 	let downloadSpeed = $state('')
@@ -91,9 +91,19 @@
 			})
 		}, 1000 * 10)
 	})
+</script> -->
+
+<script lang="ts">
+	import type { PageData } from './$types'
+
+	export let data: PageData
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+{#each data.videos as video}
+	<a href="/stream?id={video.id}">
+		<img src={video.thumbnail} alt={video.name} width="200" />
+		<h1>{video.name}</h1>
+	</a>
+{/each}
 
 <a href="/auth/login">login</a>

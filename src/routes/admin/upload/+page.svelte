@@ -71,21 +71,27 @@
 			enctype="multipart/form-data"
 			on:submit|preventDefault={uploadVideo}
 		>
-			<input type="hidden" name="cuid" value={$page.url.searchParams.get('cuid')} />
-			<Input type="file" name="file" aria-label="Upload File" accept="video/mp4" />
+			<label for="name">Name</label>
+			<Input type="text" id="name" name="name" />
+			<label for="description">Description</label>
+			<Input type="text" id="description" name="description" />
+			<label for="thumbnail">Thumbnail</label>
+			<Input
+				type="file"
+				id="thumbnail"
+				name="thumbnail"
+				aria-label="Upload thumbnail"
+				accept="image/*"
+			/>
+			<label for="file">Video</label>
+			<Input type="file" id="file" name="file" aria-label="Upload File" accept="video/mp4" />
 			{#if form?.error}
 				<p class="ml-2 text-red-400">{form.error}</p>
 			{/if}
 			<div class="flex gap-4">
-				{#if isRedirect}
-					<a href="/admin" class={buttonVariants({ variant: 'secondary', class: 'w-full' })}>
-						Back
-					</a>
-				{:else}
-					<a href="/admin/blog" class={buttonVariants({ variant: 'secondary', class: 'w-full' })}>
-						Back
-					</a>
-				{/if}
+				<a href="/admin" class={buttonVariants({ variant: 'secondary', class: 'w-full' })}>
+					Back
+				</a>
 				<Button class="w-full" type="submit">Upload</Button>
 			</div>
 		</form>

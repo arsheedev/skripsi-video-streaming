@@ -19,6 +19,7 @@ model User {
   password     String       @db.VarChar(255)
   session      Session[]
   viewedVideos VideoAsset[]
+  comments     Comment[]
 }
 
 model Session {
@@ -30,13 +31,16 @@ model Session {
 }
 
 model VideoAsset {
-  id         Int            @id @default(autoincrement())
-  name       String         @db.Text
-  url        String         @db.Text
-  format     String         @db.VarChar(50)
-  views      Int
-  qualities  VideoQuality[]
-  userViewed User[]
+  id          Int            @id @default(autoincrement())
+  name        String         @db.Text
+  description String?        @db.Text
+  url         String         @db.Text
+  format      String         @db.VarChar(50)
+  thumbnail   String         @db.Text
+  views       Int
+  comments    Comment[]
+  qualities   VideoQuality[]
+  userViewed  User[]
 }
 
 model VideoQuality {
@@ -44,6 +48,15 @@ model VideoQuality {
   resolution   String      @db.VarChar(20)
   bitrate      Int
   url          String      @db.Text
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  videoAssetId Int?
+}
+
+model Comment {
+  id           Int         @id @default(autoincrement())
+  comment      String      @db.LongText
+  User         User?       @relation(fields: [userId], references: [id])
+  userId       Int?
   VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
   videoAssetId Int?
 }
