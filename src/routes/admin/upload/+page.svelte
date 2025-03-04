@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation'
-	import { page } from '$app/stores'
 	import { Button, buttonVariants } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import { Progress } from '$lib/components/ui/progress'
@@ -11,7 +9,6 @@
 	export let form: ActionData
 
 	let loading = false
-	let isRedirect = $page.url.searchParams.get('r')
 	let speed = 0
 	let uploadedBytes = 0
 	let totalSize = 0
@@ -32,7 +29,7 @@
 		const { data: response } = await axios({
 			method: 'POST',
 			data: formData,
-			url: `/admin/upload`,
+			url: '/admin/upload',
 			onUploadProgress(progressEvent) {
 				const { loaded, total } = progressEvent
 
@@ -43,8 +40,6 @@
 			}
 		})
 		const data = JSON.parse(response.data)
-
-		await invalidate('blog:video')
 
 		loading = false
 
@@ -67,7 +62,6 @@
 		<form
 			class="flex w-[200px] flex-col gap-4"
 			method="POST"
-			action="?/uploadVideo&cuid={$page.url.searchParams.get('cuid')}{isRedirect ? '&r=true' : ''}"
 			enctype="multipart/form-data"
 			on:submit|preventDefault={uploadVideo}
 		>
