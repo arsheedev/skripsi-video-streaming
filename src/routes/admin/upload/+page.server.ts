@@ -62,7 +62,7 @@ export const actions: Actions = {
 			.webp()
 			.toFile(path.join(dirname, 'files', 'videos', cuid, 'thumbnail.webp'))
 
-		await transcode(
+		transcode(
 			path.join(dirname, 'files', 'videos', cuid, fileName),
 			path.join(dirname, 'files', 'videos', cuid)
 		)
