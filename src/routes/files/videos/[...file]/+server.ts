@@ -6,13 +6,12 @@ import type { RequestHandler } from './$types'
 export const GET: RequestHandler = async ({ params }) => {
 	const dirname = process.cwd()
 	const file = fs.readFileSync(path.join(dirname, 'files', 'videos', params.file as string))
-	console.log(params.file)
 
 	try {
 		return new Response(file, {
 			status: 200,
 			headers: {
-				'Content-Type': 'image/webp',
+				'Content-Type': 'application/x-mpegURL',
 				'Content-Length': file.length.toString()
 			}
 		})
