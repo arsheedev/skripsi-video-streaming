@@ -1,5 +1,4 @@
 <script lang="ts">
-	import fluidPlayer from 'fluid-player'
 	import 'fluid-player/src/css/fluidplayer.css'
 	import { onMount } from 'svelte'
 
@@ -24,7 +23,9 @@
 
 	let { video }: { video: VideoInterface } = $props()
 
-	onMount(() => {
+	onMount(async () => {
+		const module = await import('fluid-player')
+		const fluidPlayer = module.default
 		fluidPlayer('player', {
 			hls: {
 				overrideNative: true
