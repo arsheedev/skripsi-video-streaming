@@ -11,7 +11,6 @@ export const GET: RequestHandler = async ({ params }) => {
 		return new Response(file, {
 			status: 200,
 			headers: {
-				'Content-Type': 'application/x-mpegURL',
 				'Content-Length': file.length.toString()
 			}
 		})
