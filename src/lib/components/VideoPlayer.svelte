@@ -35,7 +35,7 @@
 
 <div class="h-[400px]">
 	<!-- svelte-ignore a11y_media_has_caption -->
-	<video id="player" width="600">
-		<source src={video.url} type="application/x-mpegURL" />
+	<video id="player" width="600" preload="metadata">
+		<source src={video.url} />
 	</video>
 </div>
