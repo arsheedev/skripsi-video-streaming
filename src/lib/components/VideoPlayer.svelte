@@ -37,7 +37,7 @@
 	})
 </script>
 
-<div class="video-container">
+<div>
 	<!-- svelte-ignore a11y_media_has_caption -->
 	<video id="player" preload="metadata" poster={video.thumbnail}>
 		<source src={video.url} type="application/x-mpegURL" />
@@ -45,14 +45,6 @@
 </div>
 
 <style>
-	.video-container {
-		width: 100%;
-		height: 60vh;
-		min-height: 500px;
-		max-height: 800px;
-		background: #000;
-	}
-
 	#player {
 		width: 100%;
 		height: 100%;
