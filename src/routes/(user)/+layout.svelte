@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Toaster } from 'svelte-sonner'
-	import '../app.css'
-	import { Search } from 'lucide-svelte'
 	import { Button } from '$lib/components/ui/button'
+	import { Search } from 'lucide-svelte'
+	import { Toaster } from 'svelte-sonner'
+	import '../../app.css'
 
 	let { children } = $props()
 </script>
