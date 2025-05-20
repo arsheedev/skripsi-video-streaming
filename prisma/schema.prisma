@@ -17,6 +17,7 @@ model User {
   id           Int          @id @default(autoincrement())
   username     String       @unique @db.VarChar(255)
   password     String       @db.VarChar(255)
+  role         Role         @default(USER)
   session      Session[]
   viewedVideos VideoAsset[]
   comments     Comment[]
@@ -38,6 +39,8 @@ model VideoAsset {
   format      String         @db.VarChar(50)
   thumbnail   String         @db.Text
   views       Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   comments    Comment[]
   qualities   VideoQuality[]
   userViewed  User[]
@@ -69,4 +72,9 @@ model UserSpeed {
   uploadSpeed   String
   latency       Int
   date          DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
 }
