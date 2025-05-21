@@ -1,8 +1,39 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte'
+	import { getUser } from '$lib/utils'
 	import type { PageData } from './$types'
+	import CommentForm from './CommentForm.svelte'
+
+	interface UserInterface {
+		name: string
+		username: string
+		imageUrl: string
+	}
 
 	export let data: PageData
+
+	let user: UserInterface = { name: '', username: '', imageUrl: '' }
+
+	if (browser) {
+		const temp = localStorage.getItem('user')
+
+		if (!temp) {
+			getUser().then((data) => {
+				localStorage.setItem('user', JSON.stringify(data))
+				user = data
+			})
+		} else {
+			user = JSON.parse(temp)
+		}
+	}
+
+	if (data.video) {
+		data.form.data.name = user.name
+		data.form.data.username = user.username
+		data.form.data.imageUrl = user.imageUrl
+		data.form.data.videoAssetId = data.video.id
+	}
 
 	// Untuk fitur "lihat selengkapnya"
 	let showFullDescription = false
@@ -167,11 +198,14 @@
 						{/each}
 					</div>
 
-					<div class="add-comment">
-						<img class="user-avatar" src="https://i.pravatar.cc/150?img=11" alt="Your avatar" />
-						<input type="text" placeholder="Tambah komentar..." class="comment-input" />
-						<button class="post-btn">Kirim</button>
-					</div>
+					{#if browser}
+						<div class="add-comment">
+							<img class="user-avatar" src={user.imageUrl} alt={user.name} loading="lazy" />
+							<input type="text" placeholder="Tambah komentar..." class="comment-input" />
+							<button class="post-btn">Kirim</button>
+							<CommentForm {data} {user} videoAssetId={data.video.id} />
+						</div>
+					{/if}
 				</section>
 			</div>
 
