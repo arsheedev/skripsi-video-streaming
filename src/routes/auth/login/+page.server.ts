@@ -39,6 +39,13 @@ export const actions: Actions = {
 			})
 		}
 
+		if (userExist.role === 'USER') {
+			return fail(400, {
+				form,
+				message: 'You are not an admin'
+			})
+		}
+
 		const isPasswordRight = await verify(userExist.password, password)
 
 		if (!isPasswordRight) {
