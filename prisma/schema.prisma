@@ -15,9 +15,11 @@ datasource db {
 
 model User {
   id           Int          @id @default(autoincrement())
+  name         String
   username     String       @unique @db.VarChar(255)
   password     String       @db.VarChar(255)
   role         Role         @default(USER)
+  imageUrl     String?
   session      Session[]
   viewedVideos VideoAsset[]
   comments     Comment[]
@@ -58,6 +60,7 @@ model VideoQuality {
 model Comment {
   id           Int         @id @default(autoincrement())
   comment      String      @db.LongText
+  cretedAt     DateTime    @default(now())
   User         User?       @relation(fields: [userId], references: [id])
   userId       Int?
   VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
