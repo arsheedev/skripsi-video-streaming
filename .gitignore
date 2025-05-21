@@ -26,3 +26,4 @@ vite.config.ts.timestamp-*
 ffmpeg.txt
 files/*
 static/videos/*
+static/test-video.mp4
