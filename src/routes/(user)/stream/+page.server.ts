@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		return { video: null, otherVideos }
 	}
 
-	db.videoAsset.update({ where: { id: video?.id }, data: { views: video.views++ } })
+	await db.videoAsset.update({ where: { id: video?.id }, data: { views: video.views++ } })
 
 	return { video, otherVideos, form: await superValidate(zod(CommentSchema)) }
 }
