@@ -50,28 +50,4 @@
 		height: 100%;
 		object-fit: contain;
 	}
-
-	@media (max-width: 1024px) {
-		.video-container {
-			height: 60vh;
-			min-height: 400px;
-			max-height: 700px;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.video-container {
-			height: 50vh;
-			min-height: 300px;
-			max-height: 500px;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.video-container {
-			height: 40vh;
-			min-height: 250px;
-			max-height: 400px;
-		}
-	}
 </style>
