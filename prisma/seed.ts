@@ -12,8 +12,11 @@ async function main() {
 
 	await db.user.create({
 		data: {
+			name: 'admin',
 			username: 'admin',
-			password: hashedPassword
+			password: hashedPassword,
+			role: 'ADMIN',
+			imageUrl: '/admin.png'
 		}
 	})
 }
