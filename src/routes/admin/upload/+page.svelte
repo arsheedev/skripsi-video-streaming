@@ -2,6 +2,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import { Progress } from '$lib/components/ui/progress'
+	import { Textarea } from '$lib/components/ui/textarea'
 	import axios from 'axios'
 	import { toast } from 'svelte-sonner'
 	import type { ActionData } from './$types'
@@ -48,46 +49,152 @@
 	}
 </script>
 
-{#if loading}
-	<div class="flex flex-col items-center">
-		<div class="mb-1 flex w-96 justify-between">
-			<span class="mx-1">{formatBytes(uploadedBytes)} / {formatBytes(totalSize)}</span>
-			<span class="mx-1">{formatBytes(speed)}/s</span>
-		</div>
-		<Progress class="w-96" value={percent} />
-		<span>{percent}%</span>
+<svelte:head>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet"
+	/>
+	<script src="https://cdn.tailwindcss.com"></script>
+</svelte:head>
+
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
+	<!-- Background Glow Effect -->
+	<div class="absolute inset-0 z-0 bg-black">
+		<div class="glow-effect"></div>
 	</div>
-{:else}
-	<div class="flex justify-center">
-		<form
-			class="flex w-[200px] flex-col gap-4"
-			method="POST"
-			enctype="multipart/form-data"
-			on:submit|preventDefault={uploadVideo}
-		>
-			<label for="name">Name</label>
-			<Input type="text" id="name" name="name" />
-			<label for="description">Description</label>
-			<Input type="text" id="description" name="description" />
-			<label for="thumbnail">Thumbnail</label>
-			<Input
-				type="file"
-				id="thumbnail"
-				name="thumbnail"
-				aria-label="Upload thumbnail"
-				accept="image/*"
-			/>
-			<label for="file">Video</label>
-			<Input type="file" id="file" name="file" aria-label="Upload File" accept="video/mp4" />
-			{#if form?.error}
-				<p class="ml-2 text-red-400">{form.error}</p>
-			{/if}
-			<div class="flex gap-4">
-				<a href="/admin" class={buttonVariants({ variant: 'secondary', class: 'w-full' })}>
-					Back
-				</a>
-				<Button class="w-full" type="submit">Upload</Button>
+
+	<!-- Upload Form -->
+	<div class="z-10 flex h-screen w-full items-center justify-center p-6">
+		{#if loading}
+			<div class="flex w-full flex-col items-center">
+				<div class="mb-2 flex w-full max-w-2xl justify-between text-gray-200">
+					<span class="mx-1">{formatBytes(uploadedBytes)} / {formatBytes(totalSize)}</span>
+					<span class="mx-1">{formatBytes(speed)}/s</span>
+				</div>
+				<Progress class="w-full max-w-2xl" value={percent} />
+				<span class="mt-2 text-gray-200">{percent}%</span>
 			</div>
-		</form>
+		{:else}
+			<form
+				class="flex h-full w-full flex-col justify-center gap-4"
+				method="POST"
+				enctype="multipart/form-data"
+				on:submit|preventDefault={uploadVideo}
+			>
+				<!-- Video and Thumbnail Upload Areas -->
+				<div class="flex w-full justify-between gap-6">
+					<!-- Video Upload Area (Left) -->
+					<div class="w-1/2">
+						<label for="file" class="mb-2 block text-gray-200">Video</label>
+						<Input
+							type="file"
+							id="file"
+							name="file"
+							aria-label="Upload Video"
+							accept="video/mp4"
+							class="hidden"
+						/>
+						<label
+							for="file"
+							class="flex h-48 w-full cursor-pointer items-center justify-center rounded-lg border-4 border-purple-500/50 bg-white text-center text-3xl font-bold text-black transition-all duration-300 hover:bg-gray-100"
+						>
+							UPLOAD
+						</label>
+					</div>
+
+					<!-- Thumbnail Upload Area (Right) -->
+					<div class="w-1/2">
+						<label for="thumbnail" class="mb-2 block text-gray-200">Thumbnail</label>
+						<Input
+							type="file"
+							id="thumbnail"
+							name="thumbnail"
+							aria-label="Upload Thumbnail"
+							accept="image/*"
+							class="hidden"
+						/>
+						<label
+							for="thumbnail"
+							class="flex h-48 w-full cursor-pointer items-center justify-center rounded-lg border border-gray-500/50 bg-gray-800/50 text-gray-200 transition-all duration-300 hover:bg-gray-700"
+						>
+							upload thumbnail
+						</label>
+					</div>
+				</div>
+
+				<!-- Title and Description Inputs -->
+				<div class="w-full">
+					<div class="mb-4">
+						<label for="name" class="mb-2 block text-gray-200">Judul</label>
+						<Input
+							type="text"
+							id="name"
+							name="name"
+							class="h-10 w-full rounded-lg border-gray-500/50 bg-gray-800/50 p-2 text-gray-200"
+						/>
+					</div>
+					<div>
+						<label for="description" class="mb-2 block text-gray-200">Deskripsi</label>
+						<Textarea
+							id="description"
+							name="description"
+							class="h-32 w-full rounded-lg border-gray-500/50 bg-gray-800/50 p-2 text-gray-200"
+						/>
+					</div>
+				</div>
+
+				{#if form?.error}
+					<p class="text-red-400">{form.error}</p>
+				{/if}
+
+				<div class="flex w-full max-w-2xl gap-4">
+					<a href="/admin" class={buttonVariants({ variant: 'secondary', class: 'w-1/2' })}>
+						Back
+					</a>
+					<Button class="w-1/2" type="submit">Upload</Button>
+				</div>
+			</form>
+		{/if}
 	</div>
-{/if}
+</div>
+
+<style>
+	:global(body) {
+		font-family: 'Inter', sans-serif;
+	}
+
+	.glow-effect {
+		position: absolute;
+		inset: 0;
+		background:
+			radial-gradient(circle 150px at 10% 10%, rgba(255, 255, 255, 0.15) 0%, transparent 100%),
+			radial-gradient(circle 150px at 90% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 100%),
+			radial-gradient(circle 150px at 30% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 100%),
+			radial-gradient(circle 150px at 70% 60%, rgba(255, 255, 255, 0.08) 0%, transparent 100%);
+		animation: slow-glow 20s ease-in-out infinite;
+		pointer-events: none;
+	}
+
+	@keyframes slow-glow {
+		0% {
+			transform: translate(0%, 0%) scale(1);
+			opacity: 0.9;
+		}
+		25% {
+			transform: translate(10%, 5%) scale(1.1);
+			opacity: 0.95;
+		}
+		50% {
+			transform: translate(5%, 10%) scale(1);
+			opacity: 0.9;
+		}
+		75% {
+			transform: translate(-5%, -5%) scale(1.05);
+			opacity: 0.95;
+		}
+		100% {
+			transform: translate(0%, 0%) scale(1);
+			opacity: 0.9;
+		}
+	}
+</style>
