@@ -35,93 +35,8 @@
 		data.form.data.videoAssetId = data.video.id
 	}
 
-	// Untuk fitur "lihat selengkapnya"
 	let showFullDescription = false
 	const MAX_DESCRIPTION_LENGTH = 150
-
-	// Dummy data komentar
-	const comments = [
-		{
-			id: 1,
-			user: 'JohnDoe',
-			avatar: 'https://i.pravatar.cc/150?img=1',
-			text: 'Video yang sangat informatif! Saya suka penjelasannya yang detail.',
-			time: '2 jam yang lalu',
-			likes: 24
-		},
-		{
-			id: 2,
-			user: 'JaneSmith',
-			avatar: 'https://i.pravatar.cc/150?img=2',
-			text: 'Bagus banget kontennya, tunggu video berikutnya!',
-			time: '5 jam yang lalu',
-			likes: 15
-		},
-		{
-			id: 3,
-			user: 'TechEnthusiast',
-			avatar: 'https://i.pravatar.cc/150?img=3',
-			text: 'Bisa lebih dijelaskan tentang bagian teknisnya di video berikutnya?',
-			time: '1 hari yang lalu',
-			likes: 8
-		},
-		{
-			id: 4,
-			user: 'CreativeMind',
-			avatar: 'https://i.pravatar.cc/150?img=4',
-			text: 'Editingnya keren banget, apa software yang digunakan?',
-			time: '1 hari yang lalu',
-			likes: 12
-		},
-		{
-			id: 5,
-			user: 'NewViewer',
-			avatar: 'https://i.pravatar.cc/150?img=5',
-			text: 'Baru pertama kali nonton channel ini, langsung subscribe!',
-			time: '2 hari yang lalu',
-			likes: 5
-		},
-		{
-			id: 6,
-			user: 'CodeMaster',
-			avatar: 'https://i.pravatar.cc/150?img=6',
-			text: 'Teknik yang dijelasin sangat berguna untuk project saya, thanks!',
-			time: '2 hari yang lalu',
-			likes: 18
-		},
-		{
-			id: 7,
-			user: 'DesignLover',
-			avatar: 'https://i.pravatar.cc/150?img=7',
-			text: 'Warna grading videonya sangat pleasing di mata, good job!',
-			time: '3 hari yang lalu',
-			likes: 7
-		},
-		{
-			id: 8,
-			user: 'MovieBuff',
-			avatar: 'https://i.pravatar.cc/150?img=8',
-			text: 'Referensi yang diberikan sangat relevan dengan industri saat ini.',
-			time: '3 hari yang lalu',
-			likes: 9
-		},
-		{
-			id: 9,
-			user: 'GamerPro',
-			avatar: 'https://i.pravatar.cc/150?img=9',
-			text: 'Kualitas audio bisa ditingkatkan lagi di video berikutnya.',
-			time: '4 hari yang lalu',
-			likes: 3
-		},
-		{
-			id: 10,
-			user: 'Traveler',
-			avatar: 'https://i.pravatar.cc/150?img=10',
-			text: 'Kontennya sangat inspiratif, membuat saya ingin mencoba langsung!',
-			time: '5 hari yang lalu',
-			likes: 11
-		}
-	]
 </script>
 
 <div class="video-page">
@@ -130,21 +45,18 @@
 		<pre>{JSON.stringify(data, null, 2)}</pre>
 	{:else}
 		<div class="content-wrapper">
-			<!-- Main Content -->
 			<div class="main-content">
-				<!-- Video Player Full Section -->
 				<section class="video-container">
 					<VideoPlayer video={data.video} />
 				</section>
 
-				<!-- Video Info Section -->
 				<section class="video-info">
 					<h1 class="video-title">{data.video.name}</h1>
 
 					<div class="video-meta">
 						<span class="views">{data.video.views.toLocaleString()} x ditonton</span>
 						<span class="separator">•</span>
-						<span class="upload-date">1 minggu yang lalu</span>
+						<span class="upload-date">{data.video.createdAt} </span>
 					</div>
 
 					{#if data.video.description}
@@ -167,30 +79,32 @@
 					{/if}
 				</section>
 
-				<!-- Komentar Section -->
 				<section class="comments-section">
-					<h2 class="comments-title">Komentar ({comments.length})</h2>
+					<h2 class="comments-title">Komentar ({data.video.comments?.length || 0})</h2>
 
 					<div class="comment-list">
-						{#each comments as comment}
+						{#each data.video.comments || [] as comment}
 							<div class="comment">
-								<img class="comment-avatar" src={comment.avatar} alt={comment.user} />
+								<img
+									class="comment-avatar"
+									src={comment.User?.imageUrl || 'https://i.pravatar.cc/150'}
+									alt={comment.User?.username || 'Unknown'}
+								/>
 								<div class="comment-content">
 									<div class="comment-header">
-										<span class="comment-user">{comment.user}</span>
-										<span class="comment-time">{comment.time}</span>
+										<span class="comment-user">{comment.User?.username || 'Unknown'}</span>
+										<span class="comment-time">
+											{new Date(comment.cretedAt).toLocaleString('id-ID', {
+												day: 'numeric',
+												month: 'long',
+												year: 'numeric',
+												hour: '2-digit',
+												minute: '2-digit'
+											})}
+										</span>
 									</div>
-									<p class="comment-text">{comment.text}</p>
+									<p class="comment-text">{comment.comment}</p>
 									<div class="comment-actions">
-										<button class="like-btn">
-											<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-												<path
-													d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-													fill="currentColor"
-												/>
-											</svg>
-											<span>{comment.likes}</span>
-										</button>
 										<button class="reply-btn">Balas</button>
 									</div>
 								</div>
@@ -199,17 +113,11 @@
 					</div>
 
 					{#if browser}
-						<div class="add-comment">
-							<img class="user-avatar" src={user.imageUrl} alt={user.name} loading="lazy" />
-							<input type="text" placeholder="Tambah komentar..." class="comment-input" />
-							<button class="post-btn">Kirim</button>
-							<CommentForm {data} {user} videoAssetId={data.video.id} />
-						</div>
+						<CommentForm {data} {user} videoAssetId={data.video.id} />
 					{/if}
 				</section>
 			</div>
 
-			<!-- Sidebar with other videos -->
 			<aside class="sidebar">
 				<h3 class="sidebar-title">Video Lainnya</h3>
 				<div class="video-list">
@@ -229,7 +137,6 @@
 </div>
 
 <style>
-	/* Base Styles */
 	.video-page {
 		max-width: 1400px;
 		margin: 0 auto;
@@ -244,7 +151,7 @@
 
 	.main-content {
 		flex: 1;
-		min-width: 0; /* Prevent flex item from overflowing */
+		min-width: 0;
 	}
 
 	.sidebar {
@@ -252,7 +159,6 @@
 		flex-shrink: 0;
 	}
 
-	/* Video Container */
 	.video-container {
 		background: #000;
 		border-radius: 8px;
@@ -260,7 +166,6 @@
 		aspect-ratio: 16/9;
 	}
 
-	/* Video Info Section */
 	.video-info {
 		margin-top: 20px;
 		padding: 0 8px;
@@ -287,7 +192,6 @@
 		font-size: 0.6rem;
 	}
 
-	/* Description Styles */
 	.description {
 		margin: 20px 0;
 	}
@@ -315,7 +219,6 @@
 		color: #ffffff;
 	}
 
-	/* Sidebar Styles */
 	.sidebar-title {
 		font-size: 1.2rem;
 		color: #ffffff;
@@ -367,7 +270,6 @@
 		margin: 0 0 4px 0;
 		line-height: 1.3;
 		display: -webkit-box;
-		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
@@ -377,7 +279,6 @@
 		color: #aaaaaa;
 	}
 
-	/* Komentar Section */
 	.comments-section {
 		margin-top: 32px;
 		padding: 0 8px;
@@ -470,51 +371,6 @@
 		color: #ff0000;
 	}
 
-	.add-comment {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		margin-top: 24px;
-	}
-
-	.user-avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		object-fit: cover;
-	}
-
-	.comment-input {
-		flex: 1;
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 20px;
-		padding: 10px 16px;
-		color: #ffffff;
-		font-size: 0.9rem;
-		outline: none;
-	}
-
-	.comment-input::placeholder {
-		color: #aaaaaa;
-	}
-
-	.post-btn {
-		background: #065fd4;
-		color: white;
-		border: none;
-		border-radius: 20px;
-		padding: 10px 16px;
-		font-size: 0.9rem;
-		font-weight: 500;
-		cursor: pointer;
-	}
-
-	.post-btn:hover {
-		background: #0554b9;
-	}
-
-	/* Responsive Styles */
 	@media (max-width: 1024px) {
 		.content-wrapper {
 			flex-direction: column;
@@ -550,14 +406,6 @@
 
 		.comments-title {
 			font-size: 1.2rem;
-		}
-
-		.comment-input {
-			padding: 8px 14px;
-		}
-
-		.post-btn {
-			padding: 8px 14px;
 		}
 	}
 </style>

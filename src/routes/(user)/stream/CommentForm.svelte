@@ -6,17 +6,17 @@
 	import { toast } from 'svelte-sonner'
 	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms'
 	import { zodClient } from 'sveltekit-superforms/adapters'
+	import { invalidateAll } from '$app/navigation'
 
-	let {
-		data,
-		user
-	}: {
+	interface Props {
 		data: {
 			form: SuperValidated<Infer<typeof CommentSchema>>
 		}
 		user: { name: string; username: string; imageUrl: string }
 		videoAssetId: number
-	} = $props()
+	}
+
+	let { data, user, videoAssetId }: Props = $props()
 	let loading = $state(false)
 	let animated = $state(false)
 
@@ -33,13 +33,12 @@
 		},
 		onResult({ result }) {
 			loading = false
-
 			if (result.type === 'failure') {
 				return toast.error(result.data?.message || 'Something went wrong!')
 			}
-
 			if (result.type === 'success') {
-				return toast.success(result.data?.message || 'Comment saved!')
+				toast.success(result.data?.message || 'Comment saved!')
+				invalidateAll()
 			}
 		},
 		onError() {
@@ -49,71 +48,168 @@
 	})
 
 	const { form: formData, enhance } = form
+
+	$formData.videoAssetId = videoAssetId
 </script>
 
-<form method="POST" action="?/createComment" use:enhance class="space-y-6">
-	<Form.Field {form} name="name">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Input {...props} type="hidden" bind:value={$formData.name} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-1 text-xs text-red-300" />
-	</Form.Field>
+<div class="add-comment">
+	<img class="user-avatar" src={user.imageUrl} alt={user.name} loading="lazy" />
+	<form method="POST" action="?/createComment" use:enhance class="form-container">
+		<Form.Field {form} name="name">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Input {...props} type="hidden" bind:value={$formData.name} />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="field-errors" />
+		</Form.Field>
 
-	<Form.Field {form} name="username">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Input {...props} type="hidden" bind:value={$formData.username} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-1 text-xs text-red-300" />
-	</Form.Field>
+		<Form.Field {form} name="username">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Input {...props} type="hidden" bind:value={$formData.username} />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="field-errors" />
+		</Form.Field>
 
-	<Form.Field {form} name="videoAssetId">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Input {...props} type="hidden" bind:value={$formData.videoAssetId} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-1 text-xs text-red-300" />
-	</Form.Field>
+		<Form.Field {form} name="videoAssetId">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Input {...props} type="hidden" bind:value={$formData.videoAssetId} />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="field-errors" />
+		</Form.Field>
 
-	<Form.Field {form} name="imageUrl">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Input {...props} type="hidden" bind:value={$formData.imageUrl} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-1 text-xs text-red-300" />
-	</Form.Field>
+		<Form.Field {form} name="imageUrl">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Input {...props} type="hidden" bind:value={$formData.imageUrl} />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors class="field-errors" />
+		</Form.Field>
 
-	<Form.Field {form} name="comment">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Input
-					{...props}
-					disabled={loading}
-					bind:value={$formData.comment}
-					placeholder="Type your comment here..."
-					class="comment-input"
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors class="mt-1 text-xs text-red-300" />
-	</Form.Field>
+		<div class="input-container">
+			<Form.Field {form} name="comment">
+				<Form.Control>
+					{#snippet children({ props })}
+						<Input
+							{...props}
+							disabled={loading}
+							bind:value={$formData.comment}
+							placeholder="Tambah komentar..."
+							class="comment-input"
+						/>
+					{/snippet}
+				</Form.Control>
+				<Form.FieldErrors class="field-errors" />
+			</Form.Field>
 
-	<div class="pt-2">
-		<Form.Button
-			disabled={loading}
-			class="w-full rounded-lg bg-red-700 py-3 font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
-		>
-			{#if loading}
-				<span class="mr-2 inline-block animate-spin">↻</span>
-				Submiting...
-			{:else}
-				Login
-			{/if}
-		</Form.Button>
-	</div>
-</form>
+			<Form.Button disabled={loading} class="post-btn">
+				{#if loading}
+					<span class="spinner">↻</span>
+					Kirim...
+				{:else}
+					Kirim
+				{/if}
+			</Form.Button>
+		</div>
+	</form>
+</div>
+
+<style>
+	.add-comment {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		margin-top: 24px;
+	}
+
+	.user-avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.form-container {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.input-container {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.comment-input {
+		flex: 1;
+		background: #000000; /* Changed to solid black */
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 20px;
+		padding: 10px 16px;
+		color: #ffffff !important; /* Ensure text is white for visibility */
+		font-size: 0.9rem;
+		outline: none;
+	}
+
+	.comment-input::placeholder {
+		color: #aaaaaa;
+	}
+
+	.post-btn {
+		background: #065fd4;
+		color: white;
+		border: none;
+		border-radius: 20px;
+		padding: 10px 16px;
+		font-size: 0.9rem;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	.post-btn:hover {
+		background: #0554b9;
+	}
+
+	.post-btn:disabled {
+		background: #043f8c;
+		cursor: not-allowed;
+	}
+
+	.spinner {
+		display: inline-block;
+		animation: spin 1s linear infinite;
+		margin-right: 8px;
+	}
+
+	.field-errors {
+		color: #ff5555;
+		font-size: 0.8rem;
+		margin-top: 4px;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.comment-input {
+			padding: 8px 14px;
+		}
+
+		.post-btn {
+			padding: 8px 14px;
+		}
+	}
+</style>
