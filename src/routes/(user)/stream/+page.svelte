@@ -57,7 +57,11 @@
 					<div class="video-meta">
 						<span class="views">{data.video.views.toLocaleString()} x ditonton</span>
 						<span class="separator">•</span>
-						<span class="upload-date">{data.video.createdAt} </span>
+						<span class="upload-date"
+							>{Intl.DateTimeFormat('id', { dateStyle: 'long', timeStyle: 'long' }).format(
+								data.video.createdAt
+							)}
+						</span>
 					</div>
 
 					{#if data.video.description}
