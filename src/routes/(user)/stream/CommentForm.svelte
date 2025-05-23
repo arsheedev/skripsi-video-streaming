@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation'
 	import * as Form from '$lib/components/ui/form'
 	import { Input } from '$lib/components/ui/input'
 	import CommentSchema from '$lib/schemas/comment'
@@ -6,7 +7,6 @@
 	import { toast } from 'svelte-sonner'
 	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms'
 	import { zodClient } from 'sveltekit-superforms/adapters'
-	import { invalidateAll } from '$app/navigation'
 
 	interface Props {
 		data: {
@@ -53,7 +53,6 @@
 </script>
 
 <div class="add-comment">
-	<img class="user-avatar" src={user.imageUrl} alt={user.name} loading="lazy" />
 	<form method="POST" action="?/createComment" use:enhance class="form-container">
 		<Form.Field {form} name="name">
 			<Form.Control>
@@ -95,7 +94,7 @@
 			<Form.Field {form} name="comment">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Input
+						<input
 							{...props}
 							disabled={loading}
 							bind:value={$formData.comment}

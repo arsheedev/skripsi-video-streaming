@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment'
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte'
 	import { getUser } from '$lib/utils'
-	import type { PageData } from './$types'
+	import type { ActionData, PageData } from './$types'
 	import CommentForm from './CommentForm.svelte'
 
 	interface UserInterface {
@@ -12,6 +12,7 @@
 	}
 
 	export let data: PageData
+	export let form: ActionData
 
 	let user: UserInterface = { name: '', username: '', imageUrl: '' }
 
@@ -29,9 +30,9 @@
 	}
 
 	if (data.video) {
-		data.form.data.name = user.name
-		data.form.data.username = user.username
-		data.form.data.imageUrl = user.imageUrl
+		data.form.data.name = form?.name || user.name
+		data.form.data.username = form?.username || user.username
+		data.form.data.imageUrl = form?.imageUrl || user.imageUrl
 		data.form.data.videoAssetId = data.video.id
 	}
 
@@ -104,9 +105,9 @@
 										</span>
 									</div>
 									<p class="comment-text">{comment.comment}</p>
-									<div class="comment-actions">
+									<!-- <div class="comment-actions">
 										<button class="reply-btn">Balas</button>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						{/each}

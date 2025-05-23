@@ -69,5 +69,7 @@ export const actions: Actions = {
 		}
 
 		await db.comment.create({ data: { comment, videoAssetId, userId: userExist.id } })
+
+		return { form, name, username, imageUrl }
 	}
 }
