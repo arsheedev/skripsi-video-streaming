@@ -48,7 +48,9 @@
 		<div class="content-wrapper">
 			<div class="main-content">
 				<section class="video-container">
-					<VideoPlayer video={data.video} />
+					{#key data.video}
+						<VideoPlayer video={data.video} />
+					{/key}
 				</section>
 
 				<section class="video-info">
