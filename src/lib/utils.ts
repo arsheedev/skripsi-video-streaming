@@ -43,3 +43,13 @@ export async function getUser() {
 
 	return { username: user, name: user, imageUrl: '/profile.png' }
 }
+
+export function loadVideo() {
+	return setInterval(async () => {
+		await fetch('/texas.jpg')
+	}, 1000)
+}
+
+export function clearVideo(video: NodeJS.Timeout) {
+	clearInterval(video)
+}
