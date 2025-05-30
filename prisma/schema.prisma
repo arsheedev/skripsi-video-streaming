@@ -19,6 +19,7 @@ model User {
   username     String       @unique @db.VarChar(255)
   password     String       @db.VarChar(255)
   role         Role         @default(USER)
+  email        String?
   imageUrl     String?
   session      Session[]
   viewedVideos VideoAsset[]
