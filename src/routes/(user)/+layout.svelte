@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import { Search } from 'lucide-svelte'
 	import { Toaster } from 'svelte-sonner'
 	import '../../app.css'
@@ -24,12 +25,18 @@
 
 			<div class="absolute left-1/2 w-1/3 min-w-[300px] -translate-x-1/2 transform">
 				<div class="relative">
-					<input
-						type="text"
-						placeholder="Search videos..."
-						class="w-full rounded-full bg-gray-700/70 px-4 py-2 pl-10 text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#E50914]"
-					/>
-					<Search class="absolute left-3 top-2.5 text-gray-400" size={20} />
+					<form method="POST" action="/search" use:enhance>
+						<input
+							type="text"
+							placeholder="Search videos..."
+							class="w-full rounded-full bg-gray-700/70 px-4 py-2 pl-10 text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#E50914]"
+							name="search"
+							autocomplete="off"
+						/>
+						<button>
+							<Search class="absolute left-3 top-2.5 text-gray-400" size={20} />
+						</button>
+					</form>
 				</div>
 			</div>
 		</div>
