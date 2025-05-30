@@ -148,10 +148,18 @@
 				{/if}
 
 				<div class="flex w-full max-w-2xl gap-4">
-					<a href="/admin" class={buttonVariants({ variant: 'secondary', class: 'w-1/2' })}>
+					<a
+						href="/admin"
+						class="inline-flex w-1/2 items-center justify-center rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-100"
+					>
 						Back
 					</a>
-					<Button class="w-1/2" type="submit">Upload</Button>
+					<button
+						type="submit"
+						class="inline-flex w-1/2 items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+					>
+						Upload
+					</button>
 				</div>
 			</form>
 		{/if}

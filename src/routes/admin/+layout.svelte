@@ -19,14 +19,16 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
-<div class="relative flex min-h-screen overflow-hidden bg-black">
+<div class="relative flex h-screen overflow-hidden bg-black">
 	<!-- Background Glow Effect -->
 	<div class="absolute inset-0 z-0 bg-black">
 		<div class="glow-effect"></div>
 	</div>
 
-	<!-- Sidebar -->
-	<aside class="z-10 flex w-64 flex-col bg-white/10 p-6 shadow-2xl backdrop-blur-lg">
+	<!-- Sidebar - Fixed height -->
+	<aside
+		class="fixed left-0 top-0 z-10 flex h-screen w-64 flex-col bg-white/10 p-6 shadow-2xl backdrop-blur-lg"
+	>
 		<!-- Profile Section -->
 		<div class="mb-8 flex flex-col items-center">
 			<div
@@ -38,7 +40,7 @@
 		</div>
 
 		<!-- Navigation -->
-		<nav class="flex-1">
+		<nav class="flex-1 overflow-y-auto">
 			<ul class="space-y-2">
 				<li>
 					<a
@@ -79,15 +81,20 @@
 		</div>
 	</aside>
 
-	<!-- Main Content -->
-	<main class="z-10 flex-1 p-8">
-		{@render children()}
+	<!-- Main Content - With scroll if needed -->
+	<main class="z-10 ml-64 h-screen flex-1 overflow-y-auto">
+		<div class="p-8">
+			{@render children()}
+		</div>
 	</main>
 </div>
 
 <style>
 	:global(body) {
 		font-family: 'Inter', sans-serif;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
 	}
 
 	.glow-effect {
