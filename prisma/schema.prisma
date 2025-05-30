@@ -29,7 +29,7 @@ model Session {
   id        Int      @id @default(autoincrement())
   expiresAt DateTime
   ipAddress String   @db.TinyText
-  User      User?    @relation(fields: [userId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int?
 }
 
@@ -53,7 +53,7 @@ model VideoQuality {
   resolution   String      @db.VarChar(20)
   bitrate      Int
   url          String      @db.Text
-  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id], onDelete: Cascade)
   videoAssetId Int?
 }
 
@@ -61,9 +61,9 @@ model Comment {
   id           Int         @id @default(autoincrement())
   comment      String      @db.LongText
   cretedAt     DateTime    @default(now())
-  User         User?       @relation(fields: [userId], references: [id])
+  User         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int?
-  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id], onDelete: Cascade)
   videoAssetId Int?
 }
 
