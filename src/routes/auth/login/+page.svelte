@@ -5,4 +5,8 @@
 	let { data }: { data: PageData } = $props()
 </script>
 
+<svelte:head>
+	<title>Login | Zapple Play</title>
+</svelte:head>
+
 <LoginForm {data} />

@@ -97,6 +97,10 @@
 	export let data: PageData
 </script>
 
+<svelte:head>
+	<title>Zapple Play</title>
+</svelte:head>
+
 <div class="mb-6 mt-8 flex items-center space-x-3">
 	<div class="h-6 w-1 rounded-full bg-red-500"></div>
 	<h2 class="text-lg font-semibold text-gray-100">List Videos</h2>

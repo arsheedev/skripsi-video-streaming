@@ -9,6 +9,10 @@
 	const MAX_DESCRIPTION_LENGTH = 150
 </script>
 
+<svelte:head>
+	<title>{data.video.name} | Zapple Play</title>
+</svelte:head>
+
 <div class="video-page">
 	{#if !data.video}
 		<p>Video tidak ditemukan</p>

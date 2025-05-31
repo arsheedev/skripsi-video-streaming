@@ -1,14 +1,21 @@
 import EditVideoSchema from '$lib/schemas/edit-video'
 import db from '$lib/server/db'
-import { fail, type Actions } from '@sveltejs/kit'
+import { fail, redirect, type Actions } from '@sveltejs/kit'
 import fs from 'fs'
 import sharp from 'sharp'
 import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async () => {
-	return { form: await superValidate(zod(EditVideoSchema)) }
+export const load: PageServerLoad = async ({ url }) => {
+	const id = Number(url.searchParams.get('id'))
+	const video = await db.videoAsset.findUnique({ where: { id } })
+
+	if (!video) {
+		redirect(303, '/not-found')
+	}
+
+	return { form: await superValidate(zod(EditVideoSchema)), video }
 }
 
 export const actions: Actions = {
