@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Upload } from 'lucide-svelte'
 	import { goto } from '$app/navigation'
+	import { Upload } from 'lucide-svelte'
 
 	// Function to handle navigation on button click
 	const handleUpload = () => {
@@ -13,7 +13,6 @@
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">

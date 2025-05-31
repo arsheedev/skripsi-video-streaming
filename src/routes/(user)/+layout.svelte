@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms'
 	import { Search } from 'lucide-svelte'
 	import { Toaster } from 'svelte-sonner'
-	import '../../app.css'
 
 	let { children } = $props()
 </script>
