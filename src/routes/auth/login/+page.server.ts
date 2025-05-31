@@ -63,7 +63,7 @@ export const actions: Actions = {
 
 		await db.session.create({
 			data: {
-				expiresAt: new Date(Date.now()),
+				expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
 				ipAddress: event.getClientAddress(),
 				userId: userExist.id
 			}
