@@ -68,7 +68,7 @@ export const actions: Actions = {
 		)
 		fs.rmSync(path.join(dirname, 'files', 'videos', cuid, fileName))
 
-		await db.videoAsset.create({
+		const video = await db.videoAsset.create({
 			data: {
 				name: name,
 				url: `/files/videos/${cuid}/index.m3u8`,
@@ -101,7 +101,7 @@ export const actions: Actions = {
 			}
 		})
 
-		return { success: 'Video uploded successfully!' }
+		return { success: 'Video uploded successfully!', videoId: video.id }
 	}
 }
 
