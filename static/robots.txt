@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: https://zappleplay.site/sitemap.xml
