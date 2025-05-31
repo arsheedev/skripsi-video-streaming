@@ -99,6 +99,10 @@
 
 <svelte:head>
 	<title>Zapple Play</title>
+	<meta
+		name="description"
+		content="This video streaming platform used for documentation and sharing information about our product and tutorial how to repair phone, laptop, gaming console, etc"
+	/>
 </svelte:head>
 
 <div class="mb-6 mt-8 flex items-center space-x-3">
