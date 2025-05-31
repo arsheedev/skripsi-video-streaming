@@ -1,6 +1,6 @@
 <script lang="ts">
 	import 'fluid-player/src/css/fluidplayer.css'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 
 	interface QualityInterface {
 		id: number
@@ -23,23 +23,50 @@
 
 	let { video }: { video: VideoInterface } = $props()
 
+	let videoEl: HTMLVideoElement
+	let fluidInstance: any
+
 	onMount(async () => {
 		const module = await import('fluid-player')
 		const fluidPlayer = module.default
-		fluidPlayer('player', {
+
+		// Ensure any prior instance is cleared before initializing
+		fluidInstance = fluidPlayer(videoEl.id, {
 			hls: {
 				overrideNative: true
 			},
 			layoutControls: {
 				fillToContainer: true
+			},
+			modules: {
+				configureHls: (options) => ({
+					maxMaxBufferLength: 30,
+					...options
+				})
 			}
 		})
+	})
+
+	onDestroy(() => {
+		if (videoEl) {
+			// Stop video playback and reset src
+			videoEl.pause()
+			videoEl.removeAttribute('src')
+			videoEl.load()
+		}
+
+		// Fluid Player does not have a public destroy() API,
+		// but HLS.js inside it keeps running, so safest is to remove the element
+		const existingEl = document.getElementById('player')
+		if (existingEl) {
+			existingEl.innerHTML = '' // clears child sources, etc.
+		}
 	})
 </script>
 
 <div>
 	<!-- svelte-ignore a11y_media_has_caption -->
-	<video id="player" preload="metadata" poster={video.thumbnail}>
+	<video id="player" bind:this={videoEl} preload="metadata" poster={video.thumbnail}>
 		<source src={video.url} type="application/x-mpegURL" />
 	</video>
 </div>
