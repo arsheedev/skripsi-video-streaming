@@ -70,6 +70,7 @@
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.476.0",
 		"parallax-js": "^3.1.0",
+		"resend": "^4.5.1",
 		"sharp": "^0.33.5",
 		"simple-hls": "^0.0.1",
 		"svelte-sonner": "^0.3.28"
