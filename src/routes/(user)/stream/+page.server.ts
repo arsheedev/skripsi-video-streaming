@@ -2,7 +2,7 @@ import CommentSchema from '$lib/schemas/comment'
 import db from '$lib/server/db'
 import { hash } from '@node-rs/argon2'
 import type { User } from '@prisma/client'
-import { fail, type Actions } from '@sveltejs/kit'
+import { fail, redirect, type Actions } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import type { PageServerLoad } from './$types'
@@ -27,11 +27,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	})
 
 	if (!video) {
-		return {
-			video: null,
-			otherVideos,
-			form: await superValidate(zod(CommentSchema))
-		}
+		redirect(303, '/not-found')
 	}
 
 	await db.videoAsset.update({
@@ -77,7 +73,8 @@ export const actions: Actions = {
 			password: '',
 			role: 'USER',
 			username: userData?.username || '',
-			imageUrl: userData?.imageUrl || ''
+			imageUrl: userData?.imageUrl || '',
+			email: ''
 		}
 
 		userExist = await db.user.findUnique({ where: { username: userData?.username } })
