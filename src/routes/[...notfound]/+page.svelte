@@ -108,9 +108,7 @@
 	}
 	.wrapper .container .one .content,
 	.wrapper .container .two .content,
-	.wrapper .container .three .content,
-	.wrapper .container .circle .content,
-	.wrapper .container .p404 .content {
+	.wrapper .container .three .content {
 		width: 600px;
 		height: 600px;
 		display: flex;
@@ -129,9 +127,7 @@
 	}
 	.wrapper .container .one .content .piece,
 	.wrapper .container .two .content .piece,
-	.wrapper .container .three .content .piece,
-	.wrapper .container .circle .content .piece,
-	.wrapper .container .p404 .content .piece {
+	.wrapper .container .three .content .piece {
 		width: 200px;
 		height: 80px;
 		display: flex;
