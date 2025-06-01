@@ -77,11 +77,7 @@
 									<div class="comment-header">
 										<span class="comment-user">{comment.User?.username || 'Unknown'}</span>
 										<span class="comment-time">
-											{new Date(comment.cretedAt).toLocaleString('id-ID', {
-												day: 'numeric',
-												month: 'long',
-												year: 'numeric'
-											})}
+											{Intl.DateTimeFormat('en-EN', { dateStyle: 'long' }).format(comment.cretedAt)}
 										</span>
 									</div>
 									<p class="comment-text">{comment.comment}</p>
