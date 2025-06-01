@@ -16,7 +16,7 @@
 	function videoPlayer(node: HTMLVideoElement) {
 		if (!data.video?.url) return
 
-		hls = new Hls({ maxBufferLength: 5, maxMaxBufferLength: 10 })
+		hls = new Hls({ maxMaxBufferLength: 30 })
 
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
@@ -49,7 +49,7 @@
 			} else {
 				hls.nextLevel = 0
 			}
-		}, 5000)
+		}, 10000)
 
 		node.addEventListener('ended', () => {
 			console.log('Video playback finished')
