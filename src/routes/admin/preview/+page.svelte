@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte'
 	import { TrashIcon } from 'lucide-svelte'
 	import type { PageData } from './$types'
@@ -76,7 +77,7 @@
 												dateStyle: 'long'
 											}).format(comment.cretedAt)}
 										</span>
-										<form method="post">
+										<form method="post" use:enhance>
 											<input type="hidden" name="id" value={comment.id} />
 											<button type="submit">
 												<TrashIcon />
