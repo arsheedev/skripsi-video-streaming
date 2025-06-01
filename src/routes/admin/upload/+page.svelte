@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { Button, buttonVariants } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import { Progress } from '$lib/components/ui/progress'
 	import { Textarea } from '$lib/components/ui/textarea'
@@ -47,7 +46,7 @@
 
 		if (data[0].success && data[0].videoId) {
 			toast.success(data[1])
-			goto(`/admin/preview?${data[2]}`)
+			goto(`/admin/preview?id=${data[2]}`)
 		}
 		if (data[0].error) toast.error(data[1])
 	}
