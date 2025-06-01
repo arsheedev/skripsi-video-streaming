@@ -69,7 +69,7 @@
 					<a
 						href="/admin/video"
 						class="flex items-center rounded-lg px-4 py-3 text-gray-200 transition-all duration-300 hover:bg-red-600/20 hover:text-white {$page
-							.url.pathname === '/admin/upload'
+							.url.pathname === '/admin/video'
 							? 'bg-red-600/30 text-white'
 							: ''}"
 					>
