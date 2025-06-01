@@ -1,11 +1,17 @@
 <script lang="ts">
-	import type { PageData } from './$types'
-	import { superForm } from 'sveltekit-superforms/client'
-	import { Video, Save, ArrowLeft } from 'lucide-svelte'
-	import { fade } from 'svelte/transition'
+	import { ArrowLeft, Save, Video } from 'lucide-svelte'
 	import { toast } from 'svelte-sonner'
+	import { fade } from 'svelte/transition'
+	import { superForm } from 'sveltekit-superforms/client'
+	import type { PageData } from './$types'
 
 	export let data: PageData
+
+	if (data.video) {
+		data.form.data.name = data.video.name
+		data.form.data.description = data.video.description
+	}
+
 	const { form, errors, message, enhance } = superForm(data.form, {
 		onResult({ result }) {
 			if (result.type === 'success') {
@@ -119,4 +125,3 @@
 		}
 	}
 </style>
-
