@@ -111,9 +111,6 @@
 										</span>
 									</div>
 									<p class="comment-text">{comment.comment}</p>
-									<!-- <div class="comment-actions">
-										<button class="reply-btn">Balas</button>
-									</div> -->
 								</div>
 							</div>
 						{/each}
@@ -147,13 +144,13 @@
 	.video-page {
 		max-width: 1400px;
 		margin: 0 auto;
-		padding: 20px;
+		padding: 16px;
 		color: #ffffff;
 	}
 
 	.content-wrapper {
 		display: flex;
-		gap: 24px;
+		gap: 16px;
 	}
 
 	.main-content {
@@ -162,7 +159,8 @@
 	}
 
 	.sidebar {
-		width: 320px;
+		width: 100%;
+		max-width: 320px;
 		flex-shrink: 0;
 	}
 
@@ -174,25 +172,25 @@
 	}
 
 	.video-info {
-		margin-top: 20px;
+		margin-top: 16px;
 		padding: 0 8px;
 	}
 
 	.video-title {
-		font-size: 1.8rem;
+		font-size: clamp(1.2rem, 4vw, 1.6rem);
 		font-weight: 700;
 		color: #ffffff;
-		margin: 16px 0 8px;
+		margin: 12px 0 8px;
 		line-height: 1.3;
 	}
 
 	.video-meta {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 		color: #aaaaaa;
-		font-size: 0.9rem;
-		margin-bottom: 16px;
+		font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+		margin-bottom: 12px;
 	}
 
 	.separator {
@@ -200,11 +198,11 @@
 	}
 
 	.description {
-		margin: 20px 0;
+		margin: 16px 0;
 	}
 
 	.description p {
-		font-size: 1.1rem;
+		font-size: clamp(0.9rem, 3vw, 1rem);
 		font-weight: 500;
 		color: #e0e0e0;
 		line-height: 1.6;
@@ -215,7 +213,7 @@
 		background: none;
 		border: none;
 		color: #aaaaaa;
-		font-size: 0.9rem;
+		font-size: clamp(0.8rem, 2.5vw, 0.9rem);
 		cursor: pointer;
 		padding: 0;
 		font-weight: 600;
@@ -227,9 +225,9 @@
 	}
 
 	.sidebar-title {
-		font-size: 1.2rem;
+		font-size: clamp(1rem, 3vw, 1.2rem);
 		color: #ffffff;
-		margin-bottom: 16px;
+		margin-bottom: 12px;
 		padding-bottom: 8px;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 	}
@@ -245,7 +243,7 @@
 		gap: 8px;
 		text-decoration: none;
 		color: inherit;
-		padding: 8px;
+		padding: 6px;
 		border-radius: 4px;
 		transition: background-color 0.2s;
 	}
@@ -255,8 +253,8 @@
 	}
 
 	.video-thumbnail {
-		width: 120px;
-		height: 68px;
+		width: 100px;
+		height: 56px;
 		border-radius: 4px;
 		object-fit: cover;
 		flex-shrink: 0;
@@ -271,7 +269,7 @@
 	}
 
 	.video-item-title {
-		font-size: 0.95rem;
+		font-size: clamp(0.85rem, 2.5vw, 0.95rem);
 		font-weight: 500;
 		color: #ffffff;
 		margin: 0 0 4px 0;
@@ -282,37 +280,37 @@
 	}
 
 	.video-views {
-		font-size: 0.8rem;
+		font-size: clamp(0.75rem, 2vw, 0.8rem);
 		color: #aaaaaa;
 	}
 
 	.comments-section {
-		margin-top: 32px;
+		margin-top: 24px;
 		padding: 0 8px;
 	}
 
 	.comments-title {
-		font-size: 1.4rem;
+		font-size: clamp(1.1rem, 3vw, 1.3rem);
 		color: #ffffff;
-		margin-bottom: 20px;
+		margin-bottom: 16px;
 		font-weight: 600;
 	}
 
 	.comment-list {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
-		margin-bottom: 24px;
+		gap: 12px;
+		margin-bottom: 20px;
 	}
 
 	.comment {
 		display: flex;
-		gap: 12px;
+		gap: 10px;
 	}
 
 	.comment-avatar {
-		width: 40px;
-		height: 40px;
+		width: 32px;
+		height: 32px;
 		border-radius: 50%;
 		object-fit: cover;
 	}
@@ -324,58 +322,26 @@
 	.comment-header {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 		margin-bottom: 4px;
 	}
 
 	.comment-user {
 		font-weight: 600;
 		color: #ffffff;
-		font-size: 0.95rem;
+		font-size: clamp(0.85rem, 2.5vw, 0.95rem);
 	}
 
 	.comment-time {
 		color: #aaaaaa;
-		font-size: 0.8rem;
+		font-size: clamp(0.75rem, 2vw, 0.8rem);
 	}
 
 	.comment-text {
 		color: #e0e0e0;
-		font-size: 0.9rem;
+		font-size: clamp(0.8rem, 2.5vw, 0.9rem);
 		line-height: 1.5;
 		margin-bottom: 8px;
-	}
-
-	.comment-actions {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.like-btn,
-	.reply-btn {
-		background: none;
-		border: none;
-		color: #aaaaaa;
-		font-size: 0.85rem;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		gap: 4px;
-		padding: 0;
-	}
-
-	.like-btn:hover,
-	.reply-btn:hover {
-		color: #ffffff;
-	}
-
-	.like-btn svg {
-		color: #aaaaaa;
-	}
-
-	.like-btn:hover svg {
-		color: #ff0000;
 	}
 
 	@media (max-width: 1024px) {
@@ -384,13 +350,14 @@
 		}
 
 		.sidebar {
-			width: 100%;
-			margin-top: 32px;
+			max-width: 100%;
+			margin-top: 24px;
 		}
 
 		.video-list {
 			flex-direction: row;
 			flex-wrap: wrap;
+			gap: 12px;
 		}
 
 		.video-item {
@@ -399,20 +366,71 @@
 	}
 
 	@media (max-width: 768px) {
-		.video-title {
-			font-size: 1.5rem;
+		.video-page {
+			padding: 12px;
 		}
 
-		.description p {
-			font-size: 1rem;
+		.content-wrapper {
+			gap: 12px;
+		}
+
+		.video-info {
+			margin-top: 12px;
+			padding: 0 4px;
+		}
+
+		.video-meta {
+			gap: 4px;
+		}
+
+		.description {
+			margin: 12px 0;
+		}
+
+		.comments-section {
+			margin-top: 20px;
+			padding: 0 4px;
+		}
+
+		.comment-list {
+			gap: 10px;
+			margin-bottom: 16px;
+		}
+
+		.comment {
+			gap: 8px;
 		}
 
 		.video-item {
 			width: 100%;
 		}
+	}
 
-		.comments-title {
-			font-size: 1.2rem;
+	@media (max-width: 640px) {
+		.video-page {
+			padding: 8px;
+		}
+
+		.video-info {
+			margin-top: 8px;
+		}
+
+		.video-meta {
+			flex-wrap: wrap;
+		}
+
+		.comments-section {
+			margin-top: 16px;
+		}
+
+		.comment-avatar {
+			width: 28px;
+			height: 28px;
+		}
+
+		.video-thumbnail {
+			width: 80px;
+			height: 45px;
 		}
 	}
 </style>
