@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { Eye, Play, Video } from 'lucide-svelte'
 	import type { PageData } from './$types'
-	import { Video, Eye, Play } from 'lucide-svelte'
-
 
 	export let data: PageData
 	const { popularVideos, totalVideos, totalViews } = data
@@ -14,13 +13,8 @@
 </script>
 
 <svelte:head>
-	<title>Admin | Zapple Play</title>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet"
-	/>
+	<title>Admin Dashboard | Zapple Play</title>
 </svelte:head>
-
 
 <div class="container mx-auto min-h-screen p-4 text-gray-100 sm:p-6 lg:p-8">
 	<div class="mb-8">
@@ -45,11 +39,6 @@
 				</div>
 			</div>
 		</div>
-
-<div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
-	<!-- Background Glow Effect -->
-	<div class="absolute inset-0 z-0 bg-black">
-		<div class="glow-effect"></div>
 	</div>
 
 	<div>
@@ -61,16 +50,20 @@
 				>
 					<div class="relative">
 						<img src={video.thumbnail} alt={video.name} class="h-48 w-full object-cover" />
-						<div
-							class="absolute right-2 top-2 rounded-full bg-red-500 p-2 transition-colors duration-200 hover:bg-red-400"
-						>
-							<Play class="h-6 w-6 text-gray-900" />
-						</div>
+						<a href="/admin/preview?id={video.id}">
+							<div
+								class="absolute right-2 top-2 rounded-full bg-red-500 p-2 transition-colors duration-200 hover:bg-red-400"
+							>
+								<Play class="h-6 w-6 text-gray-900" />
+							</div>
+						</a>
 					</div>
 					<div class="p-4">
 						<h3 class="truncate text-lg font-semibold text-gray-100">{video.name}</h3>
 						<p class="line-clamp-2 text-sm text-gray-400">
-							{video.description || 'No description available'}
+							{Intl.DateTimeFormat('en-EN', { dateStyle: 'long', timeStyle: 'short' }).format(
+								video.createdAt
+							)}
 						</p>
 					</div>
 				</div>
