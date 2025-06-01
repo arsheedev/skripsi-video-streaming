@@ -52,6 +52,7 @@
 						Dashboard
 					</a>
 				</li>
+
 				<li>
 					<a
 						href="/admin/upload"
@@ -62,6 +63,18 @@
 					>
 						<Video size={20} class="mr-3" />
 						Upload Video
+					</a>
+				</li>
+				<li>
+					<a
+						href="/admin/video"
+						class="flex items-center rounded-lg px-4 py-3 text-gray-200 transition-all duration-300 hover:bg-red-600/20 hover:text-white {$page
+							.url.pathname === '/admin/upload'
+							? 'bg-red-600/30 text-white'
+							: ''}"
+					>
+						<Video size={20} class="mr-3" />
+						Edit Video
 					</a>
 				</li>
 			</ul>
