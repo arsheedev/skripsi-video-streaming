@@ -1,5 +1,7 @@
 import db from '$lib/server/db'
 import type { Actions } from '@sveltejs/kit'
+import fs from 'fs'
+import path from 'path'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async () => {
@@ -13,7 +15,15 @@ export const actions: Actions = {
 		const formData = await request.formData()
 		const id = Number(formData.get('id'))
 
-		await db.videoAsset.delete({ where: { id } })
+		const video = await db.videoAsset.delete({ where: { id } })
+
+		fs.rm(
+			path.join(process.cwd(), video.url.replace(/\/index\.m3u8$/, '')),
+			{ recursive: true, force: true },
+			() => {
+				return
+			}
+		)
 
 		return { message: 'Video deleted successfully!' }
 	}

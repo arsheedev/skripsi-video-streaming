@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { invalidateAll } from '$app/navigation'
 	import { Pencil, Play, Trash2, Video } from 'lucide-svelte'
 	import { toast } from 'svelte-sonner'
 	import { fade, scale } from 'svelte/transition'
-	import type { PageData } from './$types'
+	import type { ActionData, PageData } from './$types'
 
-	export let data: PageData
-	const { videos } = data
+	let { data, form }: { data: PageData; form: ActionData } = $props()
+
+	if (form?.message) {
+		toast.success(form.message)
+	}
 
 	function formatNumber(num: number): string {
 		if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M'
@@ -29,11 +31,11 @@
 	</div>
 
 	<div>
-		{#if videos.length === 0}
+		{#if data.videos.length === 0}
 			<p in:fade class="text-center text-lg text-gray-400">No videos available</p>
 		{:else}
 			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{#each videos as video, i}
+				{#each data.videos as video, i}
 					<div
 						in:scale={{ delay: i * 100, duration: 300 }}
 						class="relative overflow-hidden rounded-xl border border-red-500/30 bg-gray-800/50 shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-red-500/20"
@@ -77,20 +79,7 @@
 									>
 										<Pencil class="h-5 w-5" />
 									</a>
-									<form
-										action="?/default"
-										method="POST"
-										use:enhance={() => {
-											return async ({ result }) => {
-												if (result.type === 'success') {
-													toast.success('Video deleted successfully!')
-													await invalidateAll()
-												} else {
-													toast.error('Failed to delete video')
-												}
-											}
-										}}
-									>
+									<form method="POST" use:enhance>
 										<input type="hidden" name="id" value={video.id} />
 										<button
 											type="submit"
