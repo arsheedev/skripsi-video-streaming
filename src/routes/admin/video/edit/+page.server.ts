@@ -2,6 +2,7 @@ import EditVideoSchema from '$lib/schemas/edit-video'
 import db from '$lib/server/db'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import fs from 'fs'
+import path from 'path'
 import sharp from 'sharp'
 import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
@@ -56,17 +57,15 @@ export const actions: Actions = {
 
 			const thumbnailData = await thumbnail.arrayBuffer()
 
-			fs.rm(videoExist.thumbnail, async (err) => {
-				if (err)
-					return fail(400, {
-						form,
-						message: 'Failed to upload image!'
-					})
+			fs.rm(videoExist.thumbnail, async () => {
+				const dirname = process.cwd()
 
-				await sharp(thumbnailData).webp().toFile(videoExist.thumbnail)
+				await sharp(thumbnailData).webp().toFile(path.join(dirname, videoExist.thumbnail))
 			})
 		}
 
 		await db.videoAsset.update({ where: { id: videoExist.id }, data: { name, description } })
+
+		redirect(303, '/admin/video')
 	}
 }

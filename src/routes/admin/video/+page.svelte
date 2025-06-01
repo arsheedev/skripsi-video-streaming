@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types'
-	import { Video, Play, Pencil, Trash2 } from 'lucide-svelte'
 	import { enhance } from '$app/forms'
+	import { invalidateAll } from '$app/navigation'
+	import { Pencil, Play, Trash2, Video } from 'lucide-svelte'
 	import { toast } from 'svelte-sonner'
 	import { fade, scale } from 'svelte/transition'
-	import { invalidateAll } from '$app/navigation'
+	import type { PageData } from './$types'
 
 	export let data: PageData
 	const { videos } = data
@@ -44,23 +44,26 @@
 								alt={video.name}
 								class="h-48 w-full object-cover brightness-75"
 							/>
-							<div
-								class="absolute right-3 top-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 p-2 transition-transform duration-200 hover:scale-110"
-							>
-								<Play class="h-6 w-6 text-gray-900" />
-							</div>
+							<a href="/admin/preview?id={video.id}">
+								<div
+									class="absolute right-3 top-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 p-2 transition-transform duration-200 hover:scale-110"
+								>
+									<Play class="h-6 w-6 text-gray-900" />
+								</div>
+							</a>
 						</div>
 						<div class="p-5">
 							<h3 class="truncate text-xl font-semibold text-gray-100">{video.name}</h3>
 							<p class="mt-1 line-clamp-2 text-sm text-gray-400">
-								{video.description || 'No description available'}
+								{Intl.DateTimeFormat('en-EN', { dateStyle: 'long', timeStyle: 'short' }).format(
+									video.createdAt
+								)}
 							</p>
 							<div class="mt-3 flex items-center justify-between">
 								<span class="text-sm text-gray-400">{formatNumber(video.views)} views</span>
 								<div class="flex items-center space-x-3">
 									<a
-										href={video.url}
-										target="_blank"
+										href="/admin/preview?id={video.id}"
 										rel="noopener noreferrer"
 										class="inline-flex items-center rounded-full bg-gradient-to-r from-red-500 to-red-600 px-3 py-1 text-sm font-medium text-white transition-transform duration-200 hover:scale-105"
 									>
