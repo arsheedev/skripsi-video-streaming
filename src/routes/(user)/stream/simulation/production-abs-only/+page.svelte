@@ -7,6 +7,10 @@
 	let { data }: { data: PageData } = $props()
 	let hls: Hls
 	let speed = $state(0)
+	let qualityChanged = $state(0)
+	let bufferStalled = $state(0)
+	let totalBufferDuration = $state(0)
+	let bufferingStart: number | null = $state(null)
 	let interval: NodeJS.Timeout
 
 	function videoPlayer(node: HTMLVideoElement) {
@@ -17,8 +21,27 @@
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
 
+		hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+			qualityChanged++
+		})
+
+		node.addEventListener('waiting', () => {
+			bufferingStart = Date.now()
+			bufferStalled++
+			console.log('Buffering started')
+		})
+
+		node.addEventListener('playing', () => {
+			if (bufferingStart) {
+				const duration = Date.now() - bufferingStart
+				totalBufferDuration += duration
+				console.log('Buffering ended. Duration:', duration, 'ms')
+				bufferingStart = null
+			}
+		})
+
 		interval = setInterval(async () => {
-			speed = Number(await measureDownloadSpeed())
+			speed = Math.round(await measureDownloadSpeed())
 			if (speed > 341) {
 				hls.nextLevel = 2
 			} else if (speed > 170) {
@@ -27,6 +50,11 @@
 				hls.nextLevel = 0
 			}
 		}, 5000)
+
+		node.addEventListener('ended', () => {
+			console.log('Video playback finished')
+			clearInterval(interval)
+		})
 	}
 
 	async function measureDownloadSpeed(): Promise<number> {
@@ -75,5 +103,8 @@
 			<p>quality: 240p</p>
 		{/if}
 		<p>speed: {speed}</p>
+		<p>Quality changed counts: {qualityChanged}</p>
+		<p>Buffering counts: {bufferStalled}</p>
+		<p>Total buffering time: {totalBufferDuration} ms</p>
 	{/if}
 {/if}
