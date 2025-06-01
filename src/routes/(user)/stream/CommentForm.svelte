@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation'
 	import * as Form from '$lib/components/ui/form'
-	import { Input } from '$lib/components/ui/input'
 	import CommentSchema from '$lib/schemas/comment'
 	import { onMount } from 'svelte'
 	import { toast } from 'svelte-sonner'
@@ -12,11 +11,10 @@
 		data: {
 			form: SuperValidated<Infer<typeof CommentSchema>>
 		}
-		user: { name: string; username: string; imageUrl: string }
 		videoAssetId: number
 	}
 
-	let { data, user, videoAssetId }: Props = $props()
+	let { data, videoAssetId }: Props = $props()
 	let loading = $state(false)
 	let animated = $state(false)
 
@@ -48,48 +46,10 @@
 	})
 
 	const { form: formData, enhance } = form
-
-	$formData.videoAssetId = videoAssetId
 </script>
 
 <div class="add-comment">
-	<form method="POST" action="?/createComment" use:enhance class="form-container">
-		<Form.Field {form} name="name">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Input {...props} type="hidden" bind:value={$formData.name} />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors class="field-errors" />
-		</Form.Field>
-
-		<Form.Field {form} name="username">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Input {...props} type="hidden" bind:value={$formData.username} />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors class="field-errors" />
-		</Form.Field>
-
-		<Form.Field {form} name="videoAssetId">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Input {...props} type="hidden" bind:value={$formData.videoAssetId} />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors class="field-errors" />
-		</Form.Field>
-
-		<Form.Field {form} name="imageUrl">
-			<Form.Control>
-				{#snippet children({ props })}
-					<Input {...props} type="hidden" bind:value={$formData.imageUrl} />
-				{/snippet}
-			</Form.Control>
-			<Form.FieldErrors class="field-errors" />
-		</Form.Field>
-
+	<form method="POST" action="?/createComment&id={videoAssetId}" use:enhance class="form-container">
 		<div class="input-container">
 			<Form.Field {form} name="comment">
 				<Form.Control>

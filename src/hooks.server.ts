@@ -20,6 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		event.locals.session = verified as { id: number; username: string }
 	} catch {
+		event.cookies.delete('authToken', { path: '/' })
 		event.locals.session = null
 	}
 

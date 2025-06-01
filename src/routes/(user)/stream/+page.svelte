@@ -1,49 +1,21 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
 	import VideoPlayer from '$lib/components/VideoPlayer.svelte'
-	import { getUser } from '$lib/utils'
-	import type { ActionData, PageData } from './$types'
+	import type { PageData } from './$types'
 	import CommentForm from './CommentForm.svelte'
 
-	interface UserInterface {
-		name: string
-		username: string
-		imageUrl: string
-	}
+	const { data }: { data: PageData } = $props()
 
-	export let data: PageData
-	export let form: ActionData
-
-	let user: UserInterface = { name: '', username: '', imageUrl: '' }
-
-	if (browser) {
-		const temp = localStorage.getItem('user')
-
-		if (!temp) {
-			getUser().then((data) => {
-				localStorage.setItem('user', JSON.stringify(data))
-				user = data
-			})
-		} else {
-			user = JSON.parse(temp)
-		}
-	}
-
-	if (data.video) {
-		data.form.data.name = form?.name || user.name
-		data.form.data.username = form?.username || user.username
-		data.form.data.imageUrl = form?.imageUrl || user.imageUrl
-		data.form.data.videoAssetId = data.video.id
-	}
-
-	let showFullDescription = false
+	let showFullDescription = $state(false)
 	const MAX_DESCRIPTION_LENGTH = 150
 </script>
+
+<svelte:head>
+	<title>{data.video.name} | Zapple Play</title>
+</svelte:head>
 
 <div class="video-page">
 	{#if !data.video}
 		<p>Video tidak ditemukan</p>
-		<pre>{JSON.stringify(data, null, 2)}</pre>
 	{:else}
 		<div class="content-wrapper">
 			<div class="main-content">
@@ -59,10 +31,8 @@
 					<div class="video-meta">
 						<span class="views">{data.video.views.toLocaleString()} x ditonton</span>
 						<span class="separator">•</span>
-						<span class="upload-date"
-							>{Intl.DateTimeFormat('id', { dateStyle: 'long', timeStyle: 'long' }).format(
-								data.video.createdAt
-							)}
+						<span class="upload-date">
+							{Intl.DateTimeFormat('id', { dateStyle: 'long' }).format(data.video.createdAt)}
 						</span>
 					</div>
 
@@ -77,7 +47,7 @@
 							{#if data.video.description.length > MAX_DESCRIPTION_LENGTH}
 								<button
 									class="show-more-btn"
-									on:click={() => (showFullDescription = !showFullDescription)}
+									onclick={() => (showFullDescription = !showFullDescription)}
 								>
 									{showFullDescription ? 'Tampilkan Lebih Sedikit' : 'Lihat Selengkapnya'}
 								</button>
@@ -87,6 +57,10 @@
 				</section>
 
 				<section class="comments-section">
+					{#key data.video}
+						<CommentForm {data} videoAssetId={data.video.id} />
+					{/key}
+
 					<h2 class="comments-title">Komentar ({data.video.comments?.length || 0})</h2>
 
 					<div class="comment-list">
@@ -104,9 +78,7 @@
 											{new Date(comment.cretedAt).toLocaleString('id-ID', {
 												day: 'numeric',
 												month: 'long',
-												year: 'numeric',
-												hour: '2-digit',
-												minute: '2-digit'
+												year: 'numeric'
 											})}
 										</span>
 									</div>
@@ -115,10 +87,6 @@
 							</div>
 						{/each}
 					</div>
-
-					{#if browser}
-						<CommentForm {data} {user} videoAssetId={data.video.id} />
-					{/if}
 				</section>
 			</div>
 

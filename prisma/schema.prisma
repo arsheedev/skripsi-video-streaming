@@ -14,23 +14,34 @@ datasource db {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  name         String
-  username     String       @unique @db.VarChar(255)
-  password     String       @db.VarChar(255)
-  role         Role         @default(USER)
-  imageUrl     String?
-  session      Session[]
-  viewedVideos VideoAsset[]
-  comments     Comment[]
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  username           String               @unique @db.VarChar(255)
+  password           String               @db.VarChar(255)
+  role               Role                 @default(USER)
+  email              String?
+  imageUrl           String?
+  session            Session[]
+  viewedVideos       VideoAsset[]
+  comments           Comment[]
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Session {
   id        Int      @id @default(autoincrement())
   expiresAt DateTime
   ipAddress String   @db.TinyText
-  User      User?    @relation(fields: [userId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int?
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  createdAt DateTime @default(now())
 }
 
 model VideoAsset {
@@ -53,7 +64,7 @@ model VideoQuality {
   resolution   String      @db.VarChar(20)
   bitrate      Int
   url          String      @db.Text
-  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id], onDelete: Cascade)
   videoAssetId Int?
 }
 
@@ -61,9 +72,9 @@ model Comment {
   id           Int         @id @default(autoincrement())
   comment      String      @db.LongText
   cretedAt     DateTime    @default(now())
-  User         User?       @relation(fields: [userId], references: [id])
+  User         User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int?
-  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id])
+  VideoAsset   VideoAsset? @relation(fields: [videoAssetId], references: [id], onDelete: Cascade)
   videoAssetId Int?
 }
 

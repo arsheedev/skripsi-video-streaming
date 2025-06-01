@@ -2,11 +2,11 @@
 	import * as Form from '$lib/components/ui/form'
 	import { Input } from '$lib/components/ui/input'
 	import LoginUserSchema from '$lib/schemas/login-user'
+	import { onMount } from 'svelte'
 	import { toast } from 'svelte-sonner'
+	import { fade } from 'svelte/transition'
 	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms'
 	import { zodClient } from 'sveltekit-superforms/adapters'
-	import { fade } from 'svelte/transition'
-	import { onMount } from 'svelte'
 
 	let { data }: { data: { form: SuperValidated<Infer<typeof LoginUserSchema>> } } = $props()
 	let loading = $state(false)
@@ -48,7 +48,6 @@
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black p-4">

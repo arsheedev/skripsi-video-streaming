@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { Search } from 'lucide-svelte'
-	import { Toaster } from 'svelte-sonner'
-	import '../../app.css'
 
 	let { children } = $props()
 </script>
@@ -50,8 +48,6 @@
 		{@render children()}
 	</main>
 </div>
-
-<Toaster position="top-right" richColors={true} closeButton={true} />
 
 <style>
 	:global(:root) {

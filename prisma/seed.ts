@@ -16,6 +16,7 @@ async function main() {
 			username: 'admin',
 			password: hashedPassword,
 			role: 'ADMIN',
+			email: 'riyanfanani110@gmail.com',
 			imageUrl: '/admin.png'
 		}
 	})

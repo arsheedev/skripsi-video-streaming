@@ -2,6 +2,7 @@
 	import type { PageData } from './$types'
 	import { Video, Eye, Play } from 'lucide-svelte'
 
+
 	export let data: PageData
 	const { popularVideos, totalVideos, totalViews } = data
 
@@ -11,6 +12,15 @@
 		return num.toString()
 	}
 </script>
+
+<svelte:head>
+	<title>Admin | Zapple Play</title>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
+
 
 <div class="container mx-auto min-h-screen p-4 text-gray-100 sm:p-6 lg:p-8">
 	<div class="mb-8">
@@ -35,6 +45,11 @@
 				</div>
 			</div>
 		</div>
+
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
+	<!-- Background Glow Effect -->
+	<div class="absolute inset-0 z-0 bg-black">
+		<div class="glow-effect"></div>
 	</div>
 
 	<div>

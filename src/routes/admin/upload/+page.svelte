@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, buttonVariants } from '$lib/components/ui/button'
+	import { goto } from '$app/navigation'
 	import { Input } from '$lib/components/ui/input'
 	import { Progress } from '$lib/components/ui/progress'
 	import { Textarea } from '$lib/components/ui/textarea'
@@ -44,17 +44,20 @@
 
 		loading = false
 
-		if (data[0].success) toast.success(data[1])
+		if (data[0].success && data[0].videoId) {
+			toast.success(data[1])
+			goto(`/admin/preview?id=${data[2]}`)
+		}
 		if (data[0].error) toast.error(data[1])
 	}
 </script>
 
 <svelte:head>
+	<title>Upload Video | Zapple Play</title>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">

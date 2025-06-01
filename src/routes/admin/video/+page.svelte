@@ -16,6 +16,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>List Video | Zapple Play</title>
+</svelte:head>
+
 <div class="container mx-auto min-h-screen p-4 text-gray-100 sm:p-6 lg:p-8">
 	<div class="mb-8">
 		<h1 class="mb-4 flex animate-pulse items-center text-4xl font-extrabold text-gray-100">

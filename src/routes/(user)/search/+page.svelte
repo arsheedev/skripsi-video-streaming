@@ -1,8 +1,13 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import type { PageData } from './$types'
 
 	let { data }: { data: PageData } = $props()
 </script>
+
+<svelte:head>
+	<title>{page.url.searchParams.get('q')} | Zapple Play</title>
+</svelte:head>
 
 <div class="mb-6 mt-8 flex items-center space-x-3">
 	<div class="h-6 w-1 rounded-full bg-red-500"></div>

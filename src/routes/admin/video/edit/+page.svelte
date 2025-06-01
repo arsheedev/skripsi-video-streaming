@@ -17,6 +17,10 @@
 	})
 </script>
 
+<svelte:head>
+	<title>{data.video.name} Edit | Zapple Play</title>
+</svelte:head>
+
 <div class="min-h-screenp-4 container mx-auto text-gray-100 sm:p-6 lg:p-8">
 	<div class="mx-auto max-w-lg">
 		<h1 class="mb-6 flex animate-pulse items-center text-3xl font-extrabold text-gray-100">
@@ -115,3 +119,4 @@
 		}
 	}
 </style>
+

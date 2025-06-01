@@ -1,9 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/stores'
+	import { LayoutDashboard, LogOut, User, Video } from 'lucide-svelte'
 	import type { Snippet } from 'svelte'
 	import type { LayoutData } from './$types'
-	import { User, LayoutDashboard, Video, LogOut } from 'lucide-svelte'
-	import { page } from '$app/stores'
-	import { goto } from '$app/navigation'
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props()
 
@@ -16,7 +15,6 @@
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div class="relative flex h-screen overflow-hidden bg-black">

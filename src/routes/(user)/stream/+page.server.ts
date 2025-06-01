@@ -2,7 +2,7 @@ import CommentSchema from '$lib/schemas/comment'
 import db from '$lib/server/db'
 import { hash } from '@node-rs/argon2'
 import type { User } from '@prisma/client'
-import { fail, type Actions } from '@sveltejs/kit'
+import { fail, redirect, type Actions } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import type { PageServerLoad } from './$types'
@@ -23,11 +23,11 @@ export const load: PageServerLoad = async ({ url }) => {
 			thumbnail: true,
 			views: true
 		},
-		take: 4 // Limit to 4 videos
+		take: 4
 	})
 
 	if (!video) {
-		return { video: null, otherVideos }
+		redirect(303, '/not-found')
 	}
 
 	await db.videoAsset.update({
@@ -35,7 +35,11 @@ export const load: PageServerLoad = async ({ url }) => {
 		data: { views: video.views + 1 }
 	})
 
-	return { video, otherVideos, form: await superValidate(zod(CommentSchema)) }
+	return {
+		video,
+		otherVideos,
+		form: await superValidate(zod(CommentSchema))
+	}
 }
 
 export const actions: Actions = {
@@ -45,16 +49,37 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, {
 				form,
-				message: ''
+				message: 'Write your comment first!'
 			})
 		}
 
-		const { name, username, imageUrl, comment, videoAssetId } = form.data
-		let userExist: User | null = { id: 0, name, password: '', role: 'USER', username, imageUrl }
+		const id = Number(event.url.searchParams.get('id'))
+		const videoExist = await db.videoAsset.findUnique({
+			where: { id }
+		})
 
-		userExist = await db.user.findUnique({ where: { username } })
+		if (!videoExist) {
+			return fail(404, {
+				form,
+				message: 'Video not found!'
+			})
+		}
 
-		if (!userExist) {
+		const { comment } = form.data
+		const userData = JSON.parse(String(event.cookies.get('userData')))
+		let userExist: User | null = {
+			id: 0,
+			name: userData?.name || '',
+			password: '',
+			role: 'USER',
+			username: userData?.username || '',
+			imageUrl: userData?.imageUrl || '',
+			email: ''
+		}
+
+		userExist = await db.user.findUnique({ where: { username: userData?.username } })
+
+		if (!userExist && userData) {
 			const hashedPassword = await hash('asdfasdf', {
 				// recommended minimum parameters
 				memoryCost: 19456,
@@ -64,12 +89,19 @@ export const actions: Actions = {
 			})
 
 			userExist = await db.user.create({
-				data: { name, username, imageUrl, password: hashedPassword }
+				data: {
+					name: userData.name,
+					username: userData.username,
+					imageUrl: userData.imageUrl,
+					password: hashedPassword
+				}
 			})
 		}
 
-		await db.comment.create({ data: { comment, videoAssetId, userId: userExist.id } })
+		await db.comment.create({
+			data: { comment, videoAssetId: videoExist.id, userId: userExist?.id || 0 }
+		})
 
-		return { form, name, username, imageUrl }
+		return { form }
 	}
 }
