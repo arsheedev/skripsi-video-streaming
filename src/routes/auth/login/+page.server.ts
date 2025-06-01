@@ -72,7 +72,7 @@ export const actions: Actions = {
 		event.cookies.set('authToken', authToken, {
 			path: '/',
 			httpOnly: true,
-			sameSite: true,
+			sameSite: "lax",
 			maxAge: 60 * 60 * 24
 		})
 
