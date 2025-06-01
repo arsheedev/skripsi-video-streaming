@@ -30,17 +30,18 @@
 		const module = await import('fluid-player')
 		const fluidPlayer = module.default
 
-		// Ensure any prior instance is cleared before initializing
 		fluidInstance = fluidPlayer(videoEl.id, {
 			hls: {
 				overrideNative: true
 			},
 			layoutControls: {
-				fillToContainer: true
+				fillToContainer: true,
+				autoPlay: true
 			},
 			modules: {
 				configureHls: (options) => ({
 					maxMaxBufferLength: 30,
+					startLevel: 0,
 					...options
 				})
 			}
@@ -49,32 +50,23 @@
 
 	onDestroy(() => {
 		if (videoEl) {
-			// Stop video playback and reset src
 			videoEl.pause()
 			videoEl.removeAttribute('src')
 			videoEl.load()
 		}
 
-		// Fluid Player does not have a public destroy() API,
-		// but HLS.js inside it keeps running, so safest is to remove the element
-		const existingEl = document.getElementById('player')
-		if (existingEl) {
-			existingEl.innerHTML = '' // clears child sources, etc.
+		try {
+			const wrapper = document.getElementById('fluid_video_wrapper_player')
+			if (wrapper && wrapper.parentNode) {
+				wrapper.parentNode.removeChild(wrapper)
+			}
+		} catch (error) {
+			return
 		}
 	})
 </script>
 
-<div>
-	<!-- svelte-ignore a11y_media_has_caption -->
-	<video id="player" bind:this={videoEl} preload="metadata" poster={video.thumbnail}>
-		<source src={video.url} type="application/x-mpegURL" />
-	</video>
-</div>
-
-<style>
-	#player {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-</style>
+<!-- svelte-ignore a11y_media_has_caption -->
+<video id="player" bind:this={videoEl} preload="metadata" poster={video.thumbnail}>
+	<source src={video.url} type="application/x-mpegURL" />
+</video>
