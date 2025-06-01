@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function loadVideo() {
 	return setInterval(async () => {
-		await fetch('/texas.jpg', { cache: 'no-store' })
+		await fetch('/test-file.bin', { cache: 'no-store' })
 	}, 1000)
 }
 
