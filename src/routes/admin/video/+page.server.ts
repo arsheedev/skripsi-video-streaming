@@ -15,7 +15,11 @@ export const actions: Actions = {
 		const formData = await request.formData()
 		const id = Number(formData.get('id'))
 
-		const video = await db.videoAsset.delete({ where: { id } })
+		const videoExist = await db.videoAsset.findUnique({ where: { id } })
+
+		if (!videoExist) return { message: 'Video not found!' }
+
+		const video = await db.videoAsset.delete({ where: { id: videoExist.id } })
 
 		fs.rm(
 			path.join(process.cwd(), video.url.replace(/\/index\.m3u8$/, '')),
