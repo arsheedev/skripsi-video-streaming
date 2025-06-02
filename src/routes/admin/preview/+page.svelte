@@ -77,10 +77,10 @@
 												dateStyle: 'long'
 											}).format(comment.cretedAt)}
 										</span>
-										<form method="post" use:enhance>
+										<form method="post" use:enhance class="delete-form">
 											<input type="hidden" name="id" value={comment.id} />
-											<button type="submit">
-												<TrashIcon />
+											<button type="submit" class="delete-btn" title="Hapus Komentar">
+												<TrashIcon size={16} />
 											</button>
 										</form>
 									</div>
@@ -211,8 +211,9 @@
 	.comment-header {
 		display: flex;
 		align-items: center;
-		gap: 6px;
+		gap: 8px;
 		margin-bottom: 4px;
+		position: relative;
 	}
 
 	.comment-user {
@@ -231,6 +232,33 @@
 		font-size: clamp(0.8rem, 2.5vw, 0.9rem);
 		line-height: 1.5;
 		margin-bottom: 8px;
+	}
+
+	.delete-form {
+		margin-left: 12px;
+	}
+
+	.delete-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #2a2a2a;
+		border: 1px solid #444;
+		border-radius: 4px;
+		padding: 4px;
+		cursor: pointer;
+		transition:
+			background-color 0.2s,
+			transform 0.1s;
+	}
+
+	.delete-btn:hover {
+		background-color: #ff4d4d;
+		transform: scale(1.05);
+	}
+
+	.delete-btn:active {
+		transform: scale(0.95);
 	}
 
 	@media (max-width: 1024px) {
@@ -274,6 +302,14 @@
 		.comment {
 			gap: 8px;
 		}
+
+		.delete-form {
+			margin-left: 8px;
+		}
+
+		.delete-btn {
+			padding: 3px;
+		}
 	}
 
 	@media (max-width: 640px) {
@@ -296,6 +332,14 @@
 		.comment-avatar {
 			width: 28px;
 			height: 28px;
+		}
+
+		.delete-form {
+			margin-left: 6px;
+		}
+
+		.delete-btn {
+			padding: 2px;
 		}
 	}
 </style>
