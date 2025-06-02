@@ -2,7 +2,6 @@
 	import type { PageData } from './$types'
 	import { Video, Eye, Play } from 'lucide-svelte'
 
-
 	export let data: PageData
 	const { popularVideos, totalVideos, totalViews } = data
 
@@ -20,7 +19,6 @@
 		rel="stylesheet"
 	/>
 </svelte:head>
-
 
 <div class="container mx-auto min-h-screen p-4 text-gray-100 sm:p-6 lg:p-8">
 	<div class="mb-8">
@@ -45,6 +43,8 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
 
 <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
 	<!-- Background Glow Effect -->
