@@ -10,13 +10,16 @@
 	let qualityChanged = $state(0)
 	let bufferStalled = $state(0)
 	let totalBufferDuration = $state(0)
+	let previousEma = $state(0)
 	let bufferingStart: number | null = $state(null)
 	let interval: NodeJS.Timeout
+
+	const alpha = 2 / (15 + 1)
 
 	function videoPlayer(node: HTMLVideoElement) {
 		if (!data.video?.url) return
 
-		hls = new Hls({ maxBufferLength: 5, maxMaxBufferLength: 10 })
+		hls = new Hls({ maxMaxBufferLength: 30, autoStartLoad: true, startLevel: -1 })
 
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
@@ -41,13 +44,49 @@
 		})
 
 		interval = setInterval(async () => {
-			speed = Math.round(hls.bandwidthEstimate / 8 / 1000)
-		}, 5000)
+			const tempSpeed = await measureDownloadSpeed()
+
+			if (previousEma === 0) {
+				previousEma = tempSpeed
+			}
+
+			speed = Math.round(alpha * tempSpeed + (1 - alpha) * previousEma)
+			previousEma = speed
+
+			if (speed > 341) {
+				hls.nextLevel = 2
+			} else if (speed > 170) {
+				hls.nextLevel = 1
+			} else {
+				hls.nextLevel = 0
+			}
+		}, 10000)
 
 		node.addEventListener('ended', () => {
 			console.log('Video playback finished')
+			hls.stopLoad()
 			clearInterval(interval)
 		})
+	}
+
+	async function measureDownloadSpeed(): Promise<number> {
+		const startTime = performance.now()
+		const fileSizeInBytes = 1_000_000
+
+		try {
+			const response = await fetch('/test-file.bin', { cache: 'no-store' })
+			await response.blob()
+
+			const endTime = performance.now()
+			const durationInSeconds = (endTime - startTime) / 1000
+
+			// Speed in KBps
+			const speedKbps = fileSizeInBytes / 1000 / durationInSeconds
+			return speedKbps
+		} catch (err) {
+			console.error('Speed test failed', err)
+			return 0
+		}
 	}
 
 	onDestroy(() => clearInterval(interval))
