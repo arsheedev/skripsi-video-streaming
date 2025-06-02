@@ -16,7 +16,7 @@ export const actions: Actions = {
 		let name = String(formData.get('name'))
 
 		if (!(file instanceof File)) {
-			return fail(400, { error: 'Invalid image format!' })
+			return fail(400, { error: 'Invalid video format!' })
 		}
 
 		if (file?.size === 0) {
