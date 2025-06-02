@@ -8,7 +8,7 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props()
 
 	if (form?.message) {
-		toast.success(form.message)
+		toast.info(form.message)
 	}
 
 	function formatNumber(num: number): string {

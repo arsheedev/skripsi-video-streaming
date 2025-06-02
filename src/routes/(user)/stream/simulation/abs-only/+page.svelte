@@ -7,6 +7,10 @@
 	let { data }: { data: PageData } = $props()
 	let hls: Hls
 	let count = $state(0)
+	let qualityChanged = $state(0)
+	let bufferStalled = $state(0)
+	let totalBufferDuration = $state(0)
+	let bufferingStart: number | null = $state(null)
 	const downloadSpeed = page.url.searchParams.get('speed')?.split(',') || [5000]
 
 	function videoPlayer(node: HTMLVideoElement) {
@@ -16,6 +20,25 @@
 
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
+
+		hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+			qualityChanged++
+		})
+
+		node.addEventListener('waiting', () => {
+			bufferingStart = Date.now()
+			bufferStalled++
+			console.log('Buffering started')
+		})
+
+		node.addEventListener('playing', () => {
+			if (bufferingStart) {
+				const duration = Date.now() - bufferingStart
+				totalBufferDuration += duration
+				console.log('Buffering ended. Duration:', duration, 'ms')
+				bufferingStart = null
+			}
+		})
 
 		const interval = setInterval(() => {
 			if (Number(downloadSpeed[count]) > 341) {
@@ -49,10 +72,10 @@
 		<source type="application/x-mpegURL" />
 	</video>
 	{#if browser}
-		<button onclick={() => (hls.nextLevel = -1)}>auto</button>
+		<!-- <button onclick={() => (hls.nextLevel = -1)}>auto</button>
 		<button onclick={() => (hls.nextLevel = 0)}>240p</button>
 		<button onclick={() => (hls.nextLevel = 1)}>480p</button>
-		<button onclick={() => (hls.nextLevel = 2)}>720p</button>
+		<button onclick={() => (hls.nextLevel = 2)}>720p</button> -->
 
 		{#if Number(downloadSpeed[count]) > 341}
 			<p>quality: 720p</p>
@@ -62,5 +85,8 @@
 			<p>quality: 240p</p>
 		{/if}
 		<p>speed: {downloadSpeed[count]}</p>
+		<p>Quality changed counts: {qualityChanged}</p>
+		<p>Buffering counts: {bufferStalled}</p>
+		<p>Total buffering time: {totalBufferDuration} ms</p>
 	{/if}
 {/if}
