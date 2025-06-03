@@ -11,6 +11,7 @@
 	let bufferStalled = $state(0)
 	let totalBufferDuration = $state(0)
 	let previousEma = $state(0)
+	let previousLevel = $state(-1)
 	let bufferingStart: number | null = $state(null)
 	let interval: NodeJS.Timeout
 
@@ -19,14 +20,10 @@
 	function videoPlayer(node: HTMLVideoElement) {
 		if (!data.video?.url) return
 
-		hls = new Hls({ maxMaxBufferLength: 30, autoStartLoad: true, startLevel: -1 })
+		hls = new Hls({ maxMaxBufferLength: 30 })
 
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
-
-		hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
-			qualityChanged++
-		})
 
 		node.addEventListener('waiting', () => {
 			bufferingStart = Date.now()
@@ -45,6 +42,7 @@
 
 		interval = setInterval(async () => {
 			const tempSpeed = await measureDownloadSpeed()
+			let currentLevel = -1
 
 			if (previousEma === 0) {
 				previousEma = tempSpeed
@@ -54,13 +52,18 @@
 			previousEma = speed
 
 			if (speed > 341) {
-				hls.nextLevel = 2
+				currentLevel = 2
 			} else if (speed > 170) {
-				hls.nextLevel = 1
+				currentLevel = 1
 			} else {
-				hls.nextLevel = 0
+				currentLevel = 0
 			}
-		}, 10000)
+
+			if (currentLevel !== previousLevel) {
+				qualityChanged++
+				previousLevel = currentLevel
+			}
+		}, 1000 * 5)
 
 		node.addEventListener('ended', () => {
 			console.log('Video playback finished')
