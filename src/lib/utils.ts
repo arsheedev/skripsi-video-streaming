@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function loadVideo() {
 	return setInterval(async () => {
 		await fetch('/test-file.bin', { cache: 'no-store' })
-	}, 500)
+	}, 100)
 }
 
 export function clearVideo(video: NodeJS.Timeout) {
