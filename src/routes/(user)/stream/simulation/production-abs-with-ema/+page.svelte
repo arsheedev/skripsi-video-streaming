@@ -25,6 +25,10 @@
 		hls.loadSource(data.video.url)
 		hls.attachMedia(node)
 
+		hls.on(Hls.Events.MANIFEST_PARSED, () => {
+			node.play().catch(() => console.log('Autoplay not allowed!'))
+		})
+
 		node.addEventListener('waiting', () => {
 			bufferingStart = Date.now()
 			bufferStalled++
